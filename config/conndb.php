@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "im_system_db";
+$dbname = "internshipmanagementsystem";
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);

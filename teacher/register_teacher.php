@@ -77,23 +77,22 @@
             </div>
             <div class="card-body">
 
-
-                    <form method="post" class="row g-4 m-auto" enctype="multipart/form-data">
+                    <form method="post" class="row g-4 m-auto" enctype="multipart/form-data" action="services_teacher/INSERT_teacher.php">
 
                         <div class=" col-md-4 ">
                             <label for="T_ID" class="form-label">รหัสบุคลากร</label>
                             <input type="text" class="form-control" id="T_ID" name="T_ID" maxlength="11"
-                                   placeholder="รหัสบุคลากร 11 ตัว">
+                                   placeholder="รหัสบุคลากร 11 ตัว" required>
                         </div>
                         <div class=" col-md-4">
                             <label for="T_fname" class="form-label">ชื่อ</label>
                             <input type="text" class="form-control" id="T_fname" name="T_fname" maxlength="60"
-                                   placeholder="ชื่อ" >
+                                   placeholder="ชื่อ" required>
                         </div>
                         <div class=" col-md-4">
                             <label for="T_lname" class="form-label">นามสกุล</label>
                             <input type="text" class="form-control" id="T_lname" name="T_lname" maxlength="50"
-                                   placeholder="นามสกุล" >
+                                   placeholder="นามสกุล" required>
                         </div>
                         <div class="col-md-2">
                             <label for="T_gender" class="form-label">เพศ</label>
