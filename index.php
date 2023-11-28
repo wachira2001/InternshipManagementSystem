@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -29,7 +30,7 @@
     <link rel="stylesheet" href="assets/css/animate.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.3.4/sweetalert2.min.css">
     <link rel="stylesheet" href="assets/fonts/bootstrap/bootstrap-icons.css">
-    <link rel="stylesheet" href="assets/css/main.min.css">
+    <link rel="stylesheet" href="assets/css/main.min.css?v=9999">
     <link rel="stylesheet" href="assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.3.4/sweetalert2.min.css">
 
@@ -50,7 +51,9 @@
 <!-- ส่วนจบการโหลด -->
 
 <!-- ส่วนเริ่มต้นของหน้า -->
-<div class="page-wrapper">
+<div class="container">
+    <div class="content-wrapper-scroll">
+        <div class="page-wrapper">
     <div style="font-size: 20px; font-weight: bolder;">
         <nav class="navbar navbar-expand-lg navbar-light bg-white py-2">
             <div class="container px-0">

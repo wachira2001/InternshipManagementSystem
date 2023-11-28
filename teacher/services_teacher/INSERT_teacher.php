@@ -1,5 +1,5 @@
 <?php
-require_once 'config/conndb.php';
+require_once 'conndb.php';
 
 try {
     if (
@@ -77,7 +77,7 @@ try {
                     icon: 'warning',
                     showConfirmButton: true
                 }).then(function () {
-                    window.location.href = '../index.php';
+                    window.location.href = '../register_teacher.php';
                 });
             </script>";
             return;
@@ -89,7 +89,7 @@ try {
 
         // อัปโหลดไฟล์
         $fileName = $T_ID . '.' . $ext;
-        $targetFilePath = '../teacher/image/' . $fileName;
+        $targetFilePath = '../teacher/img/' . $fileName;
         move_uploaded_file($_FILES['T_img']['tmp_name'], $targetFilePath);
 
         // เพิ่มข้อมูลในฐานข้อมูล

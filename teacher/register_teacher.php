@@ -26,10 +26,9 @@
         }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="../assets/css/animate.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.3.4/sweetalert2.min.css">
     <link rel="stylesheet" href="../assets/fonts/bootstrap/bootstrap-icons.css">
-    <link rel="stylesheet" href="../assets/css/main.min.css">
+    <link rel="stylesheet" href="../assets/css/main.min.css?v=9999">
     <link rel="stylesheet" href="../assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.3.4/sweetalert2.min.css">
 
@@ -70,23 +69,22 @@
     </div>
 
     <!-- เริ่มต้นของ เนื้อหา content -->
-    <div class="content-wrapper py-3">
+    <div class="content py-3" >
         <div class="card m-5 mx-5 ms-5 my-5 ">
             <div class="text-center py-2">
                 <h1>สมัครสมาชิกสำหรับบุคลากร</h1>
             </div>
             <div class="card-body">
-
-                    <form method="post" class="row g-4 m-auto" enctype="multipart/form-data" action="services_teacher/INSERT_teacher.php">
+                    <form method="post" class="row g-4 m-auto" enctype="multipart/form-data">
 
                         <div class=" col-md-4 ">
                             <label for="T_ID" class="form-label">รหัสบุคลากร</label>
-                            <input type="text" class="form-control" id="T_ID" name="T_ID" maxlength="11"
-                                   placeholder="รหัสบุคลากร 11 ตัว" required>
+                            <input type="text" class="form-control" id="T_ID" name="T_ID" maxlength="10"
+                                   placeholder="รหัสบุคลากร 10 ตัว" required>
                         </div>
                         <div class=" col-md-4">
                             <label for="T_fname" class="form-label">ชื่อ</label>
-                            <input type="text" class="form-control" id="T_fname" name="T_fname" maxlength="60"
+                            <input type="text" class="form-control" id="T_fname" name="T_fname" maxlength="50"
                                    placeholder="ชื่อ" required>
                         </div>
                         <div class=" col-md-4">
@@ -147,13 +145,13 @@
                         <div class="col-md-12">
                             <label for="S_username" class="form-label">ชื่อผู้ใช้</label>
                             <input type="text" class="form-control" id="T_username" name="T_username"
-                                   maxlength="50"
+                                   maxlength="15"
                                    placeholder="ชื่อผู้ใช้">
                         </div>
                         <div class="col-md-12">
                             <label for="S_password" class="form-label">รหัสผ่าน</label>
                             <input type="password" class="form-control" id="T_password" name="T_password"
-                                   maxlength="50"
+                                   maxlength="15"
                                    placeholder="รหัสผ่าน">
                         </div>
                         <div style="text-align: center" class="g-4 py-4">
@@ -262,5 +260,8 @@
         });
     }
 </script>
+<?php
+include_once 'services_teacher/INSERT_teacher.php';
+?>
 </body>
 </html>

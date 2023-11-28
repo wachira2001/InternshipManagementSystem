@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="assets/css/animate.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.3.4/sweetalert2.min.css">
     <link rel="stylesheet" href="assets/fonts/bootstrap/bootstrap-icons.css">
-    <link rel="stylesheet" href="assets/css/main.min.css">
+    <link rel="stylesheet" href="assets/css/main.min.css?v=9999">
     <link rel="stylesheet" href="assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.3.4/sweetalert2.min.css">
 </head>
@@ -107,11 +107,11 @@
 
                                 </h3>
                                 <div class="list-unstyled mt-3 mb-4">
-                                    <a href="student/sing-up.php">
+                                    <a href="student/register_student.php">
                                         <img src="img/student.gif" width="50%" height="50%" alt="Teacher Image">
                                     </a>
                                 </div>
-                                <a href="student/sing-up.php">
+                                <a href="student/register_student.php">
                                     <button type="button" class="w-100 btn btn-lg btn-outline-primary fw-bold" >สมัคร</button>
                                 </a>
                             </div>
@@ -122,12 +122,6 @@
         </div>
     </div>
     <!-- ส่วนจบของ เนื้อหา content -->
-
-
-
-
-
-
 
     <!-- เริ่มต้นของ App Footer -->
     <div class="app-footer">
