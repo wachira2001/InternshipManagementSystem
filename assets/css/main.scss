@@ -173,7 +173,7 @@ body {
 body {
 	margin: 0;
 	padding: 0;
-	font: 400 0.9rem;
+	font: 400 0.9rem Arial, sans-serif;
 	color: $font-color;
 	min-height: 100%;
 	position: relative;
@@ -795,7 +795,7 @@ img {
 			border: 0;
 			border-radius: 30px !important;
 			min-width: 240px;
-			box-shadow: 0 10px 10px rgba(134, 133, 133, 0.001)
+			box-shadow: 0 10px 10px rgba(134, 133, 133, 0.001);
 			&:focus {
 				outline: none !important;
 				border: 0;
@@ -2965,7 +2965,7 @@ ul.sales-stats {
 				font-family: "bootstrap-icons" !important;
 				font-weight: bold;
 				content: "\f26b";
-				background: url();
+				background: url(#);
 				position: absolute;
 				top: 20px;
 				left: 50%;
@@ -4671,7 +4671,7 @@ select:-webkit-autofill:focus {
 		padding: 1rem 1.2rem;
 		@include roundedCornersAll(10px, 10px, 0, 0);
 		.btn-close {
-			background: url(../img/cancel.svg) center/1em auto no-repeat;
+			background: url(#) center/1em auto no-repeat;
 		}
 	}
 	.modal-body {

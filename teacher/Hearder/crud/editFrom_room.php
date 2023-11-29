@@ -27,9 +27,10 @@ $user = getuserT($conn,$_SESSION['username']);
 $major = getmajor($conn);
 $R_ID = $_GET['R_ID'];
 $room = getroom($conn,$R_ID);
+$teachers = getTeacher($conn);
 // ปิดการเชื่อมต่อ
 $conn = null;
-//print_r($room);
+//print_r($teachers);
 //return;
 ?>
 
@@ -118,23 +119,24 @@ $conn = null;
                             </a>
                             <div class="sidebar-submenu">
                                 <ul>
-
-
                                     <?php
                                     if ($user['T_status'] == '1' ) {
                                         ?>
 
                                         <li>
-                                            <a href="showdata_major.php" class="current-page">ข้อมูลแผนก</a>
+                                            <a href="showdata_major.php" >ข้อมูลแผนก</a>
                                         </li>
                                         <li>
                                             <a href="showdata_teacher.php">ข้อมูลบุคลากร</a>
                                         </li>
                                         <li>
-                                            <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
+                                            <a href="showdata_student.php" >ข้อมูลนักศึกษา</a>
                                         </li>
                                         <li>
-                                            <a href="showdata_company.php">ข้อมูลสถานประกอบการ</a>
+                                            <a href="showdata_room.php" class="current-page">ข้อมูลห้องเรียน</a>
+                                        </li>
+                                        <li>
+                                            <a href="showdata_company.php" >ข้อมูลสถานประกอบการ</a>
                                         </li>
 
                                         <?php
@@ -170,11 +172,11 @@ $conn = null;
                         <a href="#">ข้อมูลทั่วไป</a>
                     </li>
                     <li class="breadcrumb-item breadcrumb-active" aria-current="page">
-                        <a href="showdata_major.php">ข้อมูลแผนก</a>
+                        <a href="showdata_major.php">ข้อมูลห้องเรียน</a>
 
                     </li>
                     <li class="breadcrumb-item breadcrumb-active" aria-current="page">
-                        <a href="#">แก้ไขข้อมูลแผนก</a>
+                        <a href="#">ข้อมูลห้องเรียน</a>
                     </li>
                 </ol>
                 <div class="header-actions-container">
@@ -198,8 +200,7 @@ $conn = null;
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userSettings">
                                     <!-- คำสั่งการดำเนินการในโปรไฟล์ -->
                                     <div class="header-profile-actions">
-                                        <a href="profile.html">โปรไฟล์</a>
-                                        <a href="account-settings.html">การตั้งค่า</a>
+                                        <a href="../../crud/editFrom_profile.php">โปรไฟล์</a>
                                         <a href="../../../config/logout.php">ออกจากระบบ</a>
                                     </div>
                                     <!-- ส่วนจบของคำสั่งการดำเนินการในโปรไฟล์ -->
@@ -253,16 +254,19 @@ $conn = null;
                                                     <div class="mb-3">
                                                         <label for="inputNumber" class="form-label">ปีการศึกษา</label>
                                                         <input type="text" class="form-control" id="inputNumber" placeholder="Enter Phone Number" name="R_year"
-                                                               value="<?php echo $room['R_year'];?>" readonly>
+                                                               value="<?php echo $room['R_year'];?> " readonly>
                                                     </div>
                                                 </div>
                                                 <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-4 col-sm-4 col-12">
                                                     <div class="mb-3">
                                                         <label for="inputNumber" class="form-label">ชื่อนักเรียน</label>
                                                         <input type="text" class="form-control" id="inputNumber" placeholder="Enter Phone Number" name="S_fname"
-                                                               value="<?php echo $room['S_fname'];?>"  readonly>
+                                                               value="<?php echo $room['S_fname'];?> <?php echo $room['S_lname'];?> "  readonly>
+                                                        <input type="hidden" class="form-control" id="inputNumber" name="S_ID"
+                                                               value="<?php echo $room['S_ID'];?> " readonly>
                                                     </div>
                                                 </div>
+
                                                 <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-4 col-sm-4 col-12">
                                                     <div class="mb-3">
                                                         <label for="inputNumber" class="form-label">แผนก</label>
@@ -274,13 +278,19 @@ $conn = null;
                                                     <div class="mb-3">
                                                         <label for="T_ID" class="form-label">เลือกครู (T_ID):</label>
                                                         <select name="T_ID" id="T_ID" class="form-select" required>
-                                                            <option value="<?php echo $room['T_ID']; ?>"><?php echo $room['T_fname']; ?></option>
                                                             <?php foreach ($teachers as $teacher) : ?>
-                                                                <option value="<?php echo $teacher['T_ID']; ?>"><?php echo $teacher['T_fname']; ?></option>
+                                                                <?php
+                                                                // เช็คว่า T_ID ของครูนี้เท่ากับ T_ID ที่ต้องการให้เป็นค่าเริ่มต้นหรือไม่
+                                                                $selected = ($teacher['T_ID'] == $room['T_ID']) ? 'selected' : '';
+                                                                ?>
+                                                                <option name="T_ID" value="<?php echo $teacher['T_ID']; ?>" <?php echo $selected; ?>>
+                                                                    <?php echo $teacher['T_fname']; ?>  <?php echo $teacher['T_lname']; ?>
+                                                                </option>
                                                             <?php endforeach; ?>
                                                         </select>
                                                     </div>
                                                 </div>
+
                                                 <!-- Row end -->
 
                                                 <!-- Form actions footer start -->
@@ -373,14 +383,14 @@ $conn = null;
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // กระทำเมื่อยืนยัน
-                        window.location.href = 'showdata_major.php';
+                        window.location.href = 'showdata_room.php';
                     }
                 });
             }
             function saveData() {
                 Swal.fire({
                     title: 'คุณแน่ใจหรือไม่?',
-                    text: 'ที่จะแก้ไขข้อมูล',
+                    text: 'ที่จะบันทึกการแก้ไขข้อมูล',
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -398,5 +408,5 @@ $conn = null;
     </body>
     </html>
 <?php
-require_once '../../services_teacher/edit_major.php';
+require_once '../../services_teacher/update_room.php';
 ?>

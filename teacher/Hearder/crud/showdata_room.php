@@ -172,7 +172,7 @@ $conn = null;
                     <i class="bi bi-house"></i>
                     <a href="../../index.php">ข้อมูลทั่วไป</a>
                 </li>
-                <li class="breadcrumb-item breadcrumb-active" aria-current="page">ข้อมูลบุคลากร</li>
+                <li class="breadcrumb-item breadcrumb-active" aria-current="page">ข้อมูลห้องเรียน</li>
             </ol>
             <div class="header-actions-container">
                 <!-- เริ่มต้นของการกระทำของส่วนหัวเรื่อง -->
@@ -255,7 +255,6 @@ $conn = null;
 
                                     <td >
                                         <a href="editFrom_room.php?R_ID=<?=$rooms['R_ID'];?>"><button class="btn btn-primary">แก้ไข</button></a>
-                                        <a href="services/delete_user.php?iduser=<?=$teacher['T_ID'];?>"><button class="btn btn-danger">ลบ</button></a>
                                     </td>
                                 </tr>
                             <?php } ?>

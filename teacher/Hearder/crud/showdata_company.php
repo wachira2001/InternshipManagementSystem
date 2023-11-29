@@ -119,8 +119,6 @@ $conn = null;
                         </a>
                         <div class="sidebar-submenu">
                             <ul>
-
-
                                 <?php
                                 if ($user['T_status'] == '1' ) {
                                     ?>
@@ -173,7 +171,7 @@ $conn = null;
                     <i class="bi bi-house"></i>
                     <a href="../../index.php">ข้อมูลทั่วไป</a>
                 </li>
-                <li class="breadcrumb-item breadcrumb-active" aria-current="page">ข้อมูลบุคลากร</li>
+                <li class="breadcrumb-item breadcrumb-active" aria-current="page">ข้อมูลสถานประกอบการ</li>
             </ol>
             <div class="header-actions-container">
                 <!-- เริ่มต้นของการกระทำของส่วนหัวเรื่อง -->
@@ -196,9 +194,8 @@ $conn = null;
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userSettings">
                                 <!-- คำสั่งการดำเนินการในโปรไฟล์ -->
                                 <div class="header-profile-actions">
-                                    <a href="profile.html">โปรไฟล์</a>
-                                    <a href="account-settings.html">การตั้งค่า</a>
-                                    <a href="../../database/logout.php">ออกจากระบบ</a>
+                                    <a href="../../crud/editFrom_profile.php">โปรไฟล์</a>
+                                    <a href="../../../config/logout.php">ออกจากระบบ</a>
                                 </div>
                                 <!-- ส่วนจบของคำสั่งการดำเนินการในโปรไฟล์ -->
                             </div>

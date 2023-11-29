@@ -198,8 +198,7 @@ $conn = null;
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userSettings">
                                     <!-- คำสั่งการดำเนินการในโปรไฟล์ -->
                                     <div class="header-profile-actions">
-                                        <a href="profile.html">โปรไฟล์</a>
-                                        <a href="account-settings.html">การตั้งค่า</a>
+                                        <a href="../../crud/editFrom_profile.php">โปรไฟล์</a>
                                         <a href="../../../config/logout.php">ออกจากระบบ</a>
                                     </div>
                                     <!-- ส่วนจบของคำสั่งการดำเนินการในโปรไฟล์ -->
@@ -482,7 +481,23 @@ $conn = null;
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // กระทำเมื่อยืนยัน
-                        window.location.href = 'showdata_department.php';
+                        window.location.href = 'showdata_student.php';
+                    }
+                });
+            }
+            function saveData() {
+                Swal.fire({
+                    title: 'คุณแน่ใจหรือไม่?',
+                    text: 'ที่จะบันทึกการแก้ไขข้อมูล',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ใช่, บันทึก!',
+                    cancelButtonText: 'ยกเลิก'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.querySelector('form').submit();
                     }
                 });
             }
@@ -495,5 +510,5 @@ $conn = null;
     </body>
     </html>
 <?php
-require_once '../../services_teacher/edit_major.php';
+require_once '../../services_teacher/update_student.php';
 ?>

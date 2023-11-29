@@ -126,10 +126,10 @@ $conn = null;
                                             <a href="showdata_major.php" >ข้อมูลแผนก</a>
                                         </li>
                                         <li>
-                                            <a href="showdata_teacher.php">ข้อมูลบุคลากร</a>
+                                            <a href="showdata_teacher.php" class="current-page">ข้อมูลบุคลากร</a>
                                         </li>
                                         <li>
-                                            <a href="showdata_student.php" class="current-page">ข้อมูลนักศึกษา</a>
+                                            <a href="showdata_student.php" >ข้อมูลนักศึกษา</a>
                                         </li>
                                         <li>
                                             <a href="showdata_room.php">ข้อมูลห้องเรียน</a>
@@ -171,10 +171,10 @@ $conn = null;
                         <a href="#">ข้อมูลทั่วไป</a>
                     </li>
                     <li class="breadcrumb-item breadcrumb-active" aria-current="page">
-                        <a href="showdata_major.php">ข้อมูลนักศึกษา</a>
+                        <a href="showdata_major.php">ข้อมูลบุคลากร</a>
                     </li>
                     <li class="breadcrumb-item breadcrumb-active" aria-current="page">
-                        <a href="showdata_major.php">แก้ข้อมูลนักศึกษา</a>
+                        <a href="showdata_major.php">แก้ไขข้อมูลบุคลากร</a>
                     </li>
                 </ol>
                 <div class="header-actions-container">
@@ -198,8 +198,7 @@ $conn = null;
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userSettings">
                                     <!-- คำสั่งการดำเนินการในโปรไฟล์ -->
                                     <div class="header-profile-actions">
-                                        <a href="profile.html">โปรไฟล์</a>
-                                        <a href="account-settings.html">การตั้งค่า</a>
+                                        <a href="../../crud/editFrom_profile.php">โปรไฟล์</a>
                                         <a href="../../../config/logout.php">ออกจากระบบ</a>
                                     </div>
                                     <!-- ส่วนจบของคำสั่งการดำเนินการในโปรไฟล์ -->
@@ -449,8 +448,8 @@ $conn = null;
             function showConfirmation() {
                 // แสดง SweetAlert หรือโค้ดที่ใช้ในการยืนยันก่อนที่จะยกเลิก
                 Swal.fire({
-                    title: 'คุณแน่ใจหรือไม่?',
-                    text: 'การกระทำนี้จะยกเลิกขั้นตอนที่คุณทำ',
+                    title: 'คุณแน่ใจหรือไม่ ?',
+                    text: 'การกระทำนี้จะยกเลิกขั้นตอนที่คุณทำอยู่ ',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
@@ -464,6 +463,22 @@ $conn = null;
                     }
                 });
             }
+            function saveData() {
+                Swal.fire({
+                    title: 'คุณแน่ใจหรือไม่ ?',
+                    text: 'การกระทำนี้จะบันทึกขั้นตอนที่คุณทำอยู่ ',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ใช่, บันทึก!',
+                    cancelButtonText: 'ยกเลิก'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.querySelector('form').submit();
+                    }
+                });
+            }
 
         </script>
 
@@ -473,5 +488,5 @@ $conn = null;
     </body>
     </html>
 <?php
-require_once '../../services_teacher/edit_major.php';
+require_once '../../services_teacher/update_teacher.php';
 ?>

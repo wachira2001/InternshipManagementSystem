@@ -255,8 +255,6 @@ $conn = null;
                                     <td></td>
                                     <td >
                                         <a href="editFrom_teacher.php?T_ID=<?=$teacher['T_ID'];?>"><button class="btn btn-primary">แก้ไข</button></a>
-                                        <a href="form_chang_password.php?iduser=<?=$teacher['T_ID'];?>"><button class="btn btn-success">เปลี่ยนรหัสผ่าน</button></a>
-                                        <a href="services/delete_user.php?iduser=<?=$teacher['T_ID'];?>"><button class="btn btn-danger">ลบ</button></a>
                                     </td>
                                 </tr>
                             <?php } ?>

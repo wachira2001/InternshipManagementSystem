@@ -130,7 +130,7 @@ $conn = null;
                                             <a href="Hearder/crud/showdata_student.php">ข้อมูลนักศึกษา</a>
                                         </li>
                                         <li>
-                                            <a href="CRUD/showdata_room.php">ข้อมูลห้องเรียน</a>
+                                            <a href="Hearder/crud/showdata_room.php">ข้อมูลห้องเรียน</a>
                                         </li>
                                         <li>
                                             <a href="Hearder/crud/showdata_company.php" >ข้อมูลสถานประกอบการ</a>
@@ -140,7 +140,7 @@ $conn = null;
 
                                         ?>
                                         <li>
-                                            <a href="CRUD/showdata_student.php">ข้อมูลนักศึกษา</a>
+                                            <a href="Hearder/crud/showdata_student.php">ข้อมูลนักศึกษา</a>
                                         </li>
                                         <?php
                                     }
@@ -189,7 +189,7 @@ $conn = null;
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userSettings">
                                     <!-- คำสั่งการดำเนินการในโปรไฟล์ -->
                                     <div class="header-profile-actions">
-                                        <a href="profile.html">โปรไฟล์</a>
+                                        <a href="crud/editFrom_profile.php">โปรไฟล์</a>
                                         <a href="account-settings.html">การตั้งค่า</a>
                                         <a href="../config/logout.php">ออกจากระบบ</a>
                                     </div>

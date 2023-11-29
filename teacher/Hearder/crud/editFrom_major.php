@@ -126,13 +126,16 @@ $conn = null;
                                             <a href="showdata_major.php" class="current-page">ข้อมูลแผนก</a>
                                         </li>
                                         <li>
-                                            <a href="showdata_teacher.php">ข้อมูลบุคลากร</a>
+                                            <a href="showdata_teacher.php" >ข้อมูลบุคลากร</a>
                                         </li>
                                         <li>
                                             <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
                                         </li>
                                         <li>
-                                            <a href="showdata_company.php">ข้อมูลสถานประกอบการ</a>
+                                            <a href="showdata_room.php" >ข้อมูลห้องเรียน</a>
+                                        </li>
+                                        <li>
+                                            <a href="showdata_company.php" >ข้อมูลสถานประกอบการ</a>
                                         </li>
 
                                         <?php
@@ -145,7 +148,6 @@ $conn = null;
                                         <?php
                                     }
                                     ?>
-
                                 </ul>
                             </div>
                         </li>
@@ -196,8 +198,7 @@ $conn = null;
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userSettings">
                                     <!-- คำสั่งการดำเนินการในโปรไฟล์ -->
                                     <div class="header-profile-actions">
-                                        <a href="profile.html">โปรไฟล์</a>
-                                        <a href="account-settings.html">การตั้งค่า</a>
+                                        <a href="../../crud/editFrom_profile.php">โปรไฟล์</a>
                                         <a href="../../../config/logout.php">ออกจากระบบ</a>
                                     </div>
                                     <!-- ส่วนจบของคำสั่งการดำเนินการในโปรไฟล์ -->

@@ -107,35 +107,36 @@ $conn = null;
                 <div class="sidebarMenuScroll">
                     <ul>
                         <li class="">
-                            <a href="../index.php">
+                            <a href="../../index.php">
                                 <i class="bi bi-house"></i>
                                 <span class="menu-text">หน้าแรก</span>
                             </a>
                         </li>
                         <li class="sidebar-dropdown">
                             <a href="#">
-                                <i class="bi bi-handbag" ></i>
+                                <i class="bi bi-handbag"></i>
                                 <span class="menu-text">ข้อมูลทั่วไป</span>
                             </a>
                             <div class="sidebar-submenu">
                                 <ul>
-
-
                                     <?php
                                     if ($user['T_status'] == '1' ) {
                                         ?>
 
                                         <li>
-                                            <a href="showdata_major.php" >ข้อมูลแผนก</a>
+                                            <a href="../Hearder/crud/showdata_major.php">ข้อมูลแผนก</a>
                                         </li>
                                         <li>
-                                            <a href="showdata_teacher.php">ข้อมูลบุคลากร</a>
+                                            <a href="../Hearder/crud/showdata_teacher.php" >ข้อมูลบุคลากร</a>
                                         </li>
                                         <li>
-                                            <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
+                                            <a href="../Hearder/crud/showdata_student.php">ข้อมูลนักศึกษา</a>
                                         </li>
                                         <li>
-                                            <a href="showdata_company.php">ข้อมูลสถานประกอบการ</a>
+                                            <a href="../Hearder/crud/showdata_room.php" >ข้อมูลห้องเรียน</a>
+                                        </li>
+                                        <li>
+                                            <a href="../Hearder/crud/showdata_company.php" >ข้อมูลสถานประกอบการ</a>
                                         </li>
 
                                         <?php
@@ -143,15 +144,15 @@ $conn = null;
 
                                         ?>
                                         <li>
-                                            <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
+                                            <a href="../Hearder/crud/showdata_student.php">ข้อมูลนักศึกษา</a>
                                         </li>
                                         <?php
                                     }
                                     ?>
-
                                 </ul>
                             </div>
                         </li>
+
                     </ul>
                     <!-- สิ้นสุดรายการเมนู -->
                 </div>

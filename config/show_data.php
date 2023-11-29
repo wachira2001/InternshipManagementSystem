@@ -2,7 +2,7 @@
 // ฟังก์ชั่นเพื่อดึงข้อมูลครูจากฐานข้อมูล
 function getTeacher($conn) {
     try {
-        $teacherQuery = $conn->prepare("SELECT T_ID, T_fname FROM teacher");
+        $teacherQuery = $conn->prepare("SELECT T_ID, T_fname,T_lname FROM teacher");
         $teacherQuery->execute();
         // ดึงข้อมูลทั้งหมดแบบ associative array
         $result = $teacherQuery->fetchAll(PDO::FETCH_ASSOC);
@@ -19,7 +19,9 @@ function getTeacher($conn) {
 function getuserS($conn, $username) {
     try {
         // กำหนดคำสั่ง SQL
-        $sql = "SELECT * FROM student WHERE S_username = :S_username ";
+        $sql = "SELECT student.* ,teacher.T_fname,teacher.T_lname FROM student 
+         INNER JOIN teacher ON student.T_ID = teacher.T_ID
+         WHERE S_username = :S_username";
 
         // ใช้ PDO statement เพื่อประมวลผลคำสั่ง SQL
         $stmt = $conn->prepare($sql);
@@ -147,7 +149,8 @@ function getroomall($conn) {
 }
 function getroom($conn,$R_ID) {
     try {
-        $sql = "SELECT room.*, student.S_fname,student.S_major, teacher.T_fname
+        $sql = "SELECT room.*, student.S_fname,student.S_lname,
+       student.S_major, student.S_ID, teacher.T_fname,teacher.T_lname
             FROM room
             LEFT JOIN student ON room.S_ID = student.S_ID
             LEFT JOIN teacher ON room.T_ID = teacher.T_ID

@@ -125,7 +125,7 @@ $conn = null;
                                         ?>
 
                                         <li>
-                                            <a href="showdata_major.php" class="current-page">ข้อมูลแผนก</a>
+                                            <a href="showdata_major.php" >ข้อมูลแผนก</a>
                                         </li>
                                         <li>
                                             <a href="showdata_teacher.php">ข้อมูลบุคลากร</a>
@@ -134,7 +134,7 @@ $conn = null;
                                             <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
                                         </li>
                                         <li>
-                                            <a href="showdata_company.php">ข้อมูลสถานประกอบการ</a>
+                                            <a href="showdata_company.php" class="current-page">ข้อมูลสถานประกอบการ</a>
                                         </li>
 
                                         <?php
@@ -170,11 +170,11 @@ $conn = null;
                         <a href="#">ข้อมูลทั่วไป</a>
                     </li>
                     <li class="breadcrumb-item breadcrumb-active" aria-current="page">
-                        <a href="showdata_major.php">ข้อมูลแผนก</a>
+                        <a href="showdata_major.php">ข้อมูลสถานประกอบการ</a>
 
                     </li>
                     <li class="breadcrumb-item breadcrumb-active" aria-current="page">
-                        <a href="#">แก้ไขข้อมูลแผนก</a>
+                        <a href="#">แก้ไขข้อมูลข้อมูลสถานประกอบการ</a>
                     </li>
                 </ol>
                 <div class="header-actions-container">
@@ -198,8 +198,7 @@ $conn = null;
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userSettings">
                                     <!-- คำสั่งการดำเนินการในโปรไฟล์ -->
                                     <div class="header-profile-actions">
-                                        <a href="profile.html">โปรไฟล์</a>
-                                        <a href="account-settings.html">การตั้งค่า</a>
+                                        <a href="../../crud/editFrom_profile.php">โปรไฟล์</a>
                                         <a href="../../../config/logout.php">ออกจากระบบ</a>
                                     </div>
                                     <!-- ส่วนจบของคำสั่งการดำเนินการในโปรไฟล์ -->
@@ -227,7 +226,7 @@ $conn = null;
                                 <div class="col-12">
                                     <div>
                                         <center>
-                                            <img id="previewImage" src="../../upload_img/<?php echo $company['C_img'] ?>" alt="Preview Image" class="col-12 start-50"
+                                            <img id="previewImage" src="../../../upload_img/<?php echo $company['C_img'] ?>" alt="Preview Image" class="col-12 start-50"
                                                  style="height: 300px; width: auto;  ">
                                         </center>
 
@@ -426,10 +425,9 @@ $conn = null;
                     }
                 });
             }
-
         </script>
     </body>
     </html>
 <?php
-require_once '../../services_teacher/edit_major.php';
+require_once '../../services_teacher/update_company.php';
 ?>
