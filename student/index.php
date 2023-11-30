@@ -49,7 +49,7 @@ $conn = null;
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
     <title>หน้าแรก</title>
-    <link rel="icon" type="image/png" href="../assets/icon/ic-home.png">
+    <link rel="icon" type="image/png" href="../upload_img/1.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -127,13 +127,13 @@ $conn = null;
                     } else {
                         ?>
                         <li class="">
-                            <a href="../CRUD/addFrom_company.php">
+                            <a href="crud/addFrom_company.php">
                                 <i class="bi bi-file-earmark-plus"></i>
                                 <span class="menu-text">ลงทะเบียนสถานประกอบการ</span>
                             </a>
                         </li>
                         <li class="">
-                            <a href="addFrom_request.php">
+                            <a href="crud/addFrom_request.php">
                                 <i class="bi bi-send-plus"></i>
                                 <span class="menu-text">ยื่นคำร้องออกฝึกประสบการณ์วิชาชีพ</span>
                             </a>

@@ -46,7 +46,7 @@ $conn = null;
         <meta property="og:type" content="Website">
         <meta property="og:site_name" content="Bootstrap Gallery">
         <title>หน้าแรก</title>
-        <link rel="icon" type="image/png" href="../assets/icon/ic-home.png">
+        <link rel="icon" type="image/png" href="../upload_img/1.jpg">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -110,7 +110,7 @@ $conn = null;
 
                         <li class="sidebar-dropdown">
                             <a href="#">
-                                <i class="bi bi-handbag"></i>
+                                <i class="bi bi-folder2"></i>
                                 <span class="menu-text">ข้อมูลทั่วไป</span>
                             </a>
                             <div class="sidebar-submenu">
@@ -140,7 +140,10 @@ $conn = null;
 
                                         ?>
                                         <li>
-                                            <a href="Hearder/crud/showdata_student.php">ข้อมูลนักศึกษา</a>
+                                            <a href="crud/showdata_room.php">ข้อมูลห้องเรียน</a>
+                                        </li>
+                                        <li>
+                                            <a href="crud/showdata_student.php" >ข้อมูลนักศึกษา</a>
                                         </li>
                                         <?php
                                     }
@@ -163,8 +166,8 @@ $conn = null;
                 <ol class="breadcrumb d-md-flex d-none">
                     <li class="breadcrumb-item">
                         <!-- ไอคอนบ้าน -->
-                        <i class="bi bi-file-earmark-plus"></i>
-                        <a href="addFrom_company.php">ลงทะเบียนสถานประกอบการ</a>
+                        <i class="bi bi-house"></i>
+                        <a href="index.php">หน้าแรก</a>
                     </li>
                     <!--            <li class="breadcrumb-item breadcrumb-active" aria-current="page">ขาย</li>-->
                 </ol>
@@ -190,7 +193,6 @@ $conn = null;
                                     <!-- คำสั่งการดำเนินการในโปรไฟล์ -->
                                     <div class="header-profile-actions">
                                         <a href="crud/editFrom_profile.php">โปรไฟล์</a>
-                                        <a href="account-settings.html">การตั้งค่า</a>
                                         <a href="../config/logout.php">ออกจากระบบ</a>
                                     </div>
                                     <!-- ส่วนจบของคำสั่งการดำเนินการในโปรไฟล์ -->

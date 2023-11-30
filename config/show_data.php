@@ -166,6 +166,43 @@ function getroom($conn,$R_ID) {
     }
 
 }
+function getroomToTID($conn,$T_ID) {
+    try {
+        $sql = "SELECT room.*, student.S_fname,student.S_lname,
+       student.S_major, student.S_ID, teacher.T_fname,teacher.T_lname
+            FROM room
+            LEFT JOIN student ON room.S_ID = student.S_ID
+            LEFT JOIN teacher ON room.T_ID = teacher.T_ID
+            WHERE room.T_ID = $T_ID";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchall(PDO::FETCH_ASSOC);
+        return $result;
+    } catch (PDOException $e) {
+        // จัดการข้อผิดพลาด (ถ้ามี)
+        echo "Error: " . $e->getMessage();
+        return false;
+    }
+
+}
+function getstudentToID($conn,$ID) {
+    try {
+        $sql = "SELECT student.*, student.S_fname,student.S_lname,
+       student.S_major, student.S_ID, teacher.T_fname,teacher.T_lname
+            FROM student
+            LEFT JOIN teacher ON student.T_ID = teacher.T_ID
+            WHERE student.T_ID = $ID";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchall(PDO::FETCH_ASSOC);
+        return $result;
+    } catch (PDOException $e) {
+        // จัดการข้อผิดพลาด (ถ้ามี)
+        echo "Error: " . $e->getMessage();
+        return false;
+    }
+
+}
 function getcompanyall($conn) {
     try {
         $sql = "SELECT * FROM company";
@@ -228,6 +265,20 @@ function getTeachers($conn,$T_ID) {
         return false;
     }
 
+}
+function getCompanyToPetition($conn)
+{
+    try {
+            $sql = "SELECT * FROM company ORDER BY timestamp_company DESC";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    } catch (PDOException $e) {
+        // จัดการข้อผิดพลาด (แสดงข้อความหรือทำอย่างอื่น)
+        echo "Error: " . $e->getMessage();
+        return false;
+    }
 }
 ?>
 

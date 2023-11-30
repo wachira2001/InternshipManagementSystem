@@ -6,6 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
 
     $role = ''; // กำหนดตัวแปร role เพื่อให้ใส่ค่า role ที่ได้จากการค้นหา
+    $data = ''; // กำหนดตัวแปร $data เพื่อให้ใส่ค่า ข้อมูล ที่ได้จากการค้นหา
 
     // ตรวจสอบข้อมูลในตาราง 'students'
     $stmt_student = $conn->prepare("SELECT * FROM student WHERE S_username = :S_username AND S_password = :S_password");
@@ -14,7 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt_student->execute();
 
     if ($stmt_student->rowCount() > 0) {
+        $student = $stmt_student->fetch(PDO::FETCH_ASSOC);
         $role = 'student';
+        $data = $student ;
     }
 
     // ถ้าไม่เจอในตาราง 'students', ตรวจสอบในตาราง 'teachers'
@@ -26,12 +29,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($stmt_teacher->rowCount() > 0) {
             $teacher = $stmt_teacher->fetch(PDO::FETCH_ASSOC);
-
+            $data =  $teacher;
             // ตรวจสอบระดับครู
             if ($teacher['T_status'] == 1) {
                 $role = 'H'; // ถ้าเป็นหัวหน้าแผนก
             } else {
                 $role = 'T'; // ถ้าเป็นครูปกติ
+
             }
         }
     }
@@ -40,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!empty($role)) {
         $_SESSION['username'] = $username;
         $_SESSION['role'] = $role;
+        $_SESSION['data'] = $data;
         if ($role == 'student') {
             header("Location: student/index.php");
         } elseif ($role == 'H' || $role == 'T') {

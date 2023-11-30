@@ -11,8 +11,8 @@
     <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
-    <title>สมัครสมาชิกสำหรับบุคคลากร</title>
-    <link rel="icon" type="image/png" href="../img/software.png">
+    <title>สมัครสมาชิกสำหรับบุคลากร</title>
+    <link rel="icon" type="image/png" href="../upload_img/1.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -94,7 +94,7 @@
                         </div>
                         <div class="col-md-2">
                             <label for="T_gender" class="form-label">เพศ</label>
-                            <select id="T_gender" class="form-select" name="T_gender" >
+                            <select id="T_gender" class="form-select" name="T_gender" required>
                                 <option selected>Choose...</option>
                                 <option>ชาย</option>
                                 <option>หญิง</option>
@@ -103,27 +103,27 @@
                         </div>
                         <div class="col-md-2">
                             <label for="T_birthday" class="form-label">วันเดือนปีเกิด</label>
-                            <input type="date" id="T_birthday" class="form-control" name="T_birthday" >
+                            <input type="date" id="T_birthday" class="form-control" name="T_birthday" required>
                         </div>
                         <div class=" col-md-3">
                             <label for="T_position" class="form-label">ตำแหน่ง</label>
                             <input type="text" class="form-control" id="T_position" name="T_position" maxlength="50"
-                                   placeholder="ชื่อตำแหน่ง" >
+                                   placeholder="ชื่อตำแหน่ง" required>
                         </div>
                         <div class="col-md-2">
                             <label for="T_phone" class="form-label">เบอร์โทรศัพท์</label>
                             <input type="text" class="form-control" id="T_phone" name="T_phone" maxlength="10"
-                                   placeholder="เบอร์มือถือที่สามารถติดต่อได้" >
+                                   placeholder="เบอร์มือถือที่สามารถติดต่อได้" required>
                         </div>
                         <div class="col-md-3">
-                            <label for="T_email" class="form-label">E-gmail</label>
+                            <label for="T_email" class="form-label">E-mail</label>
                             <input type="email" class="form-control" id="T_email" name="T_email" maxlength="100"
-                                   placeholder="E-gmail">
+                                   placeholder="E-mail">
                         </div>
                         <div class="col-md-12 input-group">
                             <span class="input-group-text">ที่อยู่ปัจจุบัน</span>
                             <textarea class="form-control" aria-label="With textarea" id="T_address"
-                                      name="T_address" ></textarea>
+                                      name="T_address" required></textarea>
                         </div>
 
                         <input type="hidden" class="form-control date-own" id="T_status" name="T_status"
@@ -146,13 +146,13 @@
                             <label for="S_username" class="form-label">ชื่อผู้ใช้</label>
                             <input type="text" class="form-control" id="T_username" name="T_username"
                                    maxlength="15"
-                                   placeholder="ชื่อผู้ใช้">
+                                   placeholder="ชื่อผู้ใช้" required>
                         </div>
                         <div class="col-md-12">
                             <label for="S_password" class="form-label">รหัสผ่าน</label>
                             <input type="password" class="form-control" id="T_password" name="T_password"
                                    maxlength="15"
-                                   placeholder="รหัสผ่าน">
+                                   placeholder="รหัสผ่าน" required>
                         </div>
                         <div style="text-align: center" class="g-4 py-4">
                             <button type="button" class="btn btn-danger" onclick="showConfirmation()">ยกเลิก</button>

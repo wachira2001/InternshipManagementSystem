@@ -1,6 +1,6 @@
 <?php
-require_once '../../services_teacher/conndb.php';
-require_once '../../../config/show_data.php';
+require_once '../services_teacher/conndb.php';
+require_once '../../config/show_data.php';
 // ตรวจสอบ session
 session_start();
 echo '
@@ -9,7 +9,7 @@ echo '
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert-dev.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">';
 
-if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'H')) {
+if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'H' && $_SESSION['role'] !== 'T')) {
     echo '
             <script>
             setTimeout(function() {
@@ -23,11 +23,13 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'H')) {
     </script>';
     exit();
 }
-$user = getuserT($conn,$_SESSION['username']);
-$major = getmajor($conn);
+
+$userT = getuserT($conn,$_SESSION['username']);
+$userS = getstudentToID($conn,$_SESSION['data']['T_ID']);
+$stmtD = getmajor($conn);
 // ปิดการเชื่อมต่อ
 $conn = null;
-//print_r($major);
+//print_r($user);
 //return;
 ?>
 
@@ -47,8 +49,8 @@ $conn = null;
     <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
-    <title>ข้อมูลแผนก</title>
-    <link rel="icon" type="image/png" href="../../../upload_img/1.jpg">
+    <title>ข้อมูลนักศึกษา</title>
+    <link rel="icon" type="image/png" href="../../upload_img/1.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -62,11 +64,11 @@ $conn = null;
         }
     </style>
 
-    <link rel="stylesheet" href="../../../assets/css/animate.css">
+    <link rel="stylesheet" href="../../assets/css/animate.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.3.4/sweetalert2.min.css">
-    <link rel="stylesheet" href="../../../assets/fonts/bootstrap/bootstrap-icons.css">
-    <link rel="stylesheet" href="../../../assets/css/main.min.css">
-    <link rel="stylesheet" href="../../../assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="../../assets/fonts/bootstrap/bootstrap-icons.css">
+    <link rel="stylesheet" href="../../assets/css/main.min.css">
+    <link rel="stylesheet" href="../../assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
 
 </head>
 
@@ -82,12 +84,11 @@ $conn = null;
         <div class="line5"></div>
     </div>
 </div>
-
-
 <!-- ส่วนจบการโหลด -->
 
 <!-- ส่วนเริ่มต้นของหน้า -->
 <div class="page-wrapper">
+
     <!-- ส่วนเริ่มต้นของไซด์บาร์ -->
     <nav class="sidebar-wrapper">
 
@@ -95,7 +96,7 @@ $conn = null;
         <div class="sidebar-brand">
             <a href="../../index.php" class="logo">
                 <span class="avatar">
-                    <img src="../../../upload_img/<?php echo $major['M_img'];?>" alt="Admin Dashboards" style="width: auto;height: 100px"/>
+                    <img src="../../upload_img/<?php echo $stmtD['M_img'];?>" alt="Admin Dashboards" style="width: auto;height: 100px"/>
                 </span>
             </a>
         </div>
@@ -118,24 +119,26 @@ $conn = null;
                         </a>
                         <div class="sidebar-submenu">
                             <ul>
+
+
                                 <?php
-                                if ($user['T_status'] == '1' ) {
+                                if ($userT['T_status'] == '1' ) {
                                     ?>
 
                                     <li>
-                                        <a href="showdata_major.php" class="current-page">ข้อมูลแผนก</a>
+                                        <a href="../Hearder/crud/showdata_major.php">ข้อมูลแผนก</a>
                                     </li>
                                     <li>
-                                        <a href="showdata_teacher.php">ข้อมูลบุคลากร</a>
+                                        <a href="../Hearder/crud/showdata_teacher.php">ข้อมูลบุคลากร</a>
                                     </li>
                                     <li>
-                                        <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
+                                        <a href="../Hearder/crud/showdata_student.php" >ข้อมูลนักศึกษา</a>
                                     </li>
                                     <li>
-                                        <a href="showdata_room.php">ข้อมูลห้องเรียน</a>
+                                        <a href="../Hearder/crud/showdata_room.php">ข้อมูลห้องเรียน</a>
                                     </li>
                                     <li>
-                                        <a href="showdata_company.php" >ข้อมูลสถานประกอบการ</a>
+                                        <a href="../Hearder/crud/showdata_company.php" >ข้อมูลสถานประกอบการ</a>
                                     </li>
 
                                     <?php
@@ -143,7 +146,10 @@ $conn = null;
 
                                     ?>
                                     <li>
-                                        <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
+                                        <a href="showdata_room.php">ข้อมูลห้องเรียน</a>
+                                    </li>
+                                    <li>
+                                        <a href="showdata_student.php" class="current-page">ข้อมูลนักศึกษา</a>
                                     </li>
                                     <?php
                                 }
@@ -168,11 +174,9 @@ $conn = null;
             <ol class="breadcrumb d-md-flex d-none" >
                 <li class="breadcrumb-item">
                     <i class="bi bi-folder2"></i>
-                    <a href="#">ข้อมูลทั่วไป</a>
+                    <a href="../index.php">ข้อมูลทั่วไป</a>
                 </li>
-                <li class="breadcrumb-item breadcrumb-active" aria-current="page">
-                    <a href="showdata_major.php">ข้อมูลแผนก</a>
-                </li>
+                <li class="breadcrumb-item breadcrumb-active" aria-current="page">ข้อมูลนักศึกษา</li>
             </ol>
             <div class="header-actions-container">
                 <!-- เริ่มต้นของการกระทำของส่วนหัวเรื่อง -->
@@ -183,10 +187,10 @@ $conn = null;
                             <!-- ลิงค์การตั้งค่าผู้ใช้ -->
                             <a href="#" id="userSettings" class="user-settings" data-toggle="dropdown" aria-haspopup="true">
                                 <!-- ชื่อผู้ใช้ -->
-                                <span class="user-name d-none d-md-block"><?php echo $user['T_fname']; ?></span>
+                                <span class="user-name d-none d-md-block"><?php echo $userT['T_fname']; ?></span>
                                 <!-- รูปประจำตัว -->
                                 <span class="avatar">
-                                <img src="../../img/<?php echo $user['T_img']; ?>" alt="Admin Templates">
+                                <img src="../img/<?php echo $userT['T_img'] ?>" alt="Admin Templates">
                                     <!-- สถานะออนไลน์ -->
                                 <span class="status online"></span>
                             </span>
@@ -195,8 +199,8 @@ $conn = null;
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userSettings">
                                 <!-- คำสั่งการดำเนินการในโปรไฟล์ -->
                                 <div class="header-profile-actions">
-                                    <a href="../../crud/editFrom_profile.php">โปรไฟล์</a>
-                                    <a href="../../../config/logout.php">ออกจากระบบ</a>
+                                    <a href="editFrom_profile.php">โปรไฟล์</a>
+                                    <a href="../../config/logout.php">ออกจากระบบ</a>
                                 </div>
                                 <!-- ส่วนจบของคำสั่งการดำเนินการในโปรไฟล์ -->
                             </div>
@@ -217,79 +221,43 @@ $conn = null;
             <!-- ส่วนเริ่มต้นของคอนเทนเนอร์ -->
             <div class="content-wrapper">
 
-                <div class="row">
-                    <div class="col-12">
-                        <div>
-                            <center>
-                                <img id="previewImage" src="../../../upload_img/<?php echo $major['M_img'] ?>" alt="Preview Image" class="col-12 start-50"
-                                     style="height: 300px; width: auto;  ">
-                            </center>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table m-0">
+                            <thead>
+                            <tr>
+                                <th>รหัสนักศึกษา</th>
+                                <th>ชื่อ</th>
+                                <th>สกุล</th>
+                                <th>สาขา</th>
+                                <th>ชั้น</th>
+                                <th>ภาคเรียนที่ออกฝึกงาน</th>
+                                <th>ปีการศึกษาที่ออกฝึกงาน</th>
+                                <th>ครูที่ปรึกษา</th>
+                                <th> </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($userS as $student) { ?>
+                                <tr>
+                                    <th><?=$student['S_ID'];?></th>
+                                    <td><?=$student['S_fname'];?></td>
+                                    <td><?=$student['S_lname'];?></td>
+                                    <td><?=$student['S_major'];?></td>
+                                    <td><?=$student['S_level'];?></td>
+                                    <td><?=$student['S_enrollment_term'];?></td>
+                                    <th><?=$student['S_enrollment_year'];?></th>
+                                    <td><?=$student['T_fname'];?></td>
 
-                        </div>
-                        <div>
-                            <!--                        <div class="mb-3">-->
-                            <!--                            <label for="formFile" class="form-label">อัพโหลดรูป</label>-->
-                            <!--                            <input class="form-control" type="file" id="imageInput" accept="image/*" name="M_img">-->
-                            <!--                        </div>-->
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col-sm-12 col-12">
+                                    <td>
+<!--                                        <a href="editFrom_student.php?S_ID=--><?php //=$student['S_ID'];?><!--"><button class="btn btn-primary">แก้ไข</button></a>-->
+<!--                                        <a href="services/delete_user.php?iduser=--><?php //=$student['S_ID'];?><!--"><button class="btn btn-danger">ลบ</button></a>-->
+                                    </td>
+                                </tr>
+                            <?php } ?>
 
-                                <!-- Card start -->
-                                <div class="card">
-                                    <div class="card-header">
-                                        <div class="card-title">ข้อมูลแผนก</div>
-                                    </div>
-                                    <div class="card-body">
-
-                                        <!-- Row start -->
-                                        <div class="row ">
-                                            <div class="col-12 text-center">
-                                                <div class="form-section-title">รายละเอียด</div>
-                                            </div>
-                                            <div class="col-12 py-2">
-                                                <div class="">
-                                                    <label for="inputName" class="form-label">ชื่อแผนก</label>
-                                                    <input type="text" class="form-control" id="inputName" placeholder="ชื่อแผนก" name="M_Name"
-                                                           value="<?=$major['M_Name'];?>" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 py-2">
-                                                <div class="">
-                                                    <label for="inputEmail" class="form-label">ชื่อสถาบันที่สังกัด</label>
-                                                    <input type="text" class="form-control" id="inputEmail" placeholder="ชื่อสถาบันที่สังกัด" name="M_college"
-                                                           value="<?=$major['M_college'];?>" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 py-2">
-                                                <div class="">
-                                                    <label for="inputNumber" class="form-label">ที่ตั้งแผนก</label>
-                                                    <input type="text" class="form-control" id="inputNumber" placeholder="ที่ตั้งแผนก" name="M_address"
-                                                           value="<?=$major['M_address'];?>" readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <br>
-
-
-                                        <!-- Row end -->
-
-                                        <!-- Form actions footer start -->
-                                        <div class="form-actions-footer">
-                                            <a href="editFrom_major.php"><button class="btn btn-primary">แก้ไข</button></a>
-                                        </div>
-                                        <!-- Form actions footer end -->
-
-                                    </div>
-                                </div>
-                                <!-- Card end -->
-
-                            </div>
-
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -312,21 +280,21 @@ $conn = null;
     <!-- ส่วนจบของหน้า -->
 
     <!-- เริ่มต้นของไฟล์ JavaScript ที่จำเป็น -->
-    <script src="../../../assets/js/jquery.min.js"></script>
-    <script src="../../../assets/js/bootstrap.bundle.min.js"></script>
-    <script src="../../../assets/js/modernizr.js"></script>
-    <script src="../../../assets/js/moment.js"></script>
+    <script src="../../assets/js/jquery.min.js"></script>
+    <script src="../../assets/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/modernizr.js"></script>
+    <script src="../../assets/js/moment.js"></script>
 
     <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->
-    <script src="../../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
-    <script src="../../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-    <script src="../../../assets/vendor/apex/apexcharts.min.js"></script>
-    <script src="../../../assets/vendor/apex/custom/sales/salesGraph.js"></script>
-    <script src="../../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>
-    <script src="../../../assets/vendor/apex/custom/sales/taskGraph.js"></script>
+    <script src="../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
+    <script src="../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
+    <script src="../../assets/vendor/apex/apexcharts.min.js"></script>
+    <script src="../../assets/vendor/apex/custom/sales/salesGraph.js"></script>
+    <script src="../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>
+    <script src="../../assets/vendor/apex/custom/sales/taskGraph.js"></script>
 
     <!-- ไฟล์ JavaScript หลัก -->
-    <script src="../../../assets/js/main.js"></script>
+    <script src="../../assets/js/main.js"></script>
     <script>
         document.getElementById('imageInput').addEventListener('change', function (e) {
             var preview = document.getElementById('previewImage');

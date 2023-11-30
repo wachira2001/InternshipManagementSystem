@@ -1,48 +1,43 @@
 <?php
-require_once '../../upload_img';
+require_once 'conndb.php';
 try {
     if (
         isset(
-            $_POST['M_ID'],
-            $_POST['M_Name'],
-            $_POST['M_college'],
-            $_FILES['M_img'],
-            $_POST['M_address']
+
+            $_POST['T_ID'],
+            $_POST['S_ID']
+
         )
     ) {
-        $M_ID = $_POST['M_ID'];
-        $M_Name = $_POST['M_Name'];
-        $M_college = $_POST['M_college'];
-        $M_img = $_FILES['M_img'];
-        $M_address = $_POST['M_address'];
 
-        // ตรวจสอบประเภทของไฟล์
-        $filename = $_FILES['M_img']['name'];
-        $ext = pathinfo($filename, PATHINFO_EXTENSION);
-        // อัปโหลดไฟล์
-        $fileName = $M_ID . '.' . "jpg";
-        $targetFilePath = '../../upload_img/'. $fileName;
-        move_uploaded_file($_FILES['M_img']['tmp_name'], $targetFilePath);
+        $T_ID = $_POST['T_ID'];
+        $S_ID = $_POST['S_ID'];
+        $R_ID = $_POST['R_ID'];
 
 
+        // คำสั่ง SQL UPDATE สำหรับตาราง room
+        $updateRoomStmt = $conn->prepare("UPDATE room
+                                          SET 
+                                               T_ID = :T_ID
+                                          WHERE R_ID = :R_ID");
 
-        // คำสั่ง SQL UPDATE
-        $updateStmt = $conn->prepare("UPDATE major 
-                                      SET 
-                                          M_Name = :M_Name,
-                                          M_college = :M_college,
-                                          M_img = :M_img,
-                                          M_address = :M_address
-                                      WHERE M_ID = :M_ID");
-        // กำหนดค่าพารามิเตอร์
-        $updateStmt->bindParam(':M_ID', $M_ID, PDO::PARAM_STR);
-        $updateStmt->bindParam(':M_Name', $M_Name, PDO::PARAM_STR);
-        $updateStmt->bindParam(':M_college', $M_college, PDO::PARAM_STR);
-        $updateStmt->bindParam(':M_img', $fileName, PDO::PARAM_STR);
-        $updateStmt->bindParam(':M_address', $M_address, PDO::PARAM_STR);
+        $updateRoomStmt->bindParam(':T_ID', $T_ID, PDO::PARAM_STR);
+        $updateRoomStmt->bindParam(':R_ID', $R_ID, PDO::PARAM_STR);
+
+        // คำสั่ง SQL UPDATE สำหรับตาราง student
+        $updateStudentStmt = $conn->prepare("UPDATE student
+                                            SET 
+                                                 T_ID = :T_ID
+                                            WHERE S_ID = :S_ID");
+
+        $updateStudentStmt->bindParam(':T_ID', $T_ID, PDO::PARAM_STR);
+        $updateStudentStmt->bindParam(':S_ID', $S_ID, PDO::PARAM_STR);
 
         // ทำการ execute คำสั่ง SQL
-        if ($updateStmt->execute()) {
+        $updateRoomSuccess = $updateRoomStmt->execute();
+        $updateStudentSuccess = $updateStudentStmt->execute();
+
+        if ($updateRoomSuccess && $updateStudentSuccess) {
             // แสดง SweetAlert2 แจ้งว่าปรับปรุงข้อมูลสำเร็จ
             echo "
             <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
@@ -54,10 +49,9 @@ try {
                     showConfirmButton: false,
                     timer: 5000
                 }).then(function () {
-                    window.location.href = '../crud/showdata_major.php';
+                    window.location.href = '../CRUD/showdata_room.php';
                 });
             </script>";
-
         } else {
             // แสดง SweetAlert2 กรณีเกิดข้อผิดพลาดในการปรับปรุงข้อมูล
             echo "

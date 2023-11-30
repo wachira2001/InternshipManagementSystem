@@ -12,7 +12,7 @@
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
     <title>สมัครสมาชิก</title>
-    <link rel="icon" type="image/png" href="img/software.png">
+    <link rel="icon" type="image/png" href="upload_img/1.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -100,7 +100,7 @@
                     <div class="col mx-auto py-5">
                         <div class="card mb-6">
                             <div class="card-header py-3">
-                                <h4 class="my-0 fw-normal fw-bold">สำหรับเรียน/นักศึกษา</h4>
+                                <h4 class="my-0 fw-normal fw-bold">สำหรับนักเรียน/นักศึกษา</h4>
                             </div>
                             <div class="card-body ">
                                 <h3 class="card-title pricing-card-title ">เป็นการสมัครสมาชิกเพื่อเข้าใช้งานระบบ <br>สำหรับนักเรียน/นักศึกษา

@@ -190,12 +190,12 @@ $getTeacher = getTeacher($conn)
                     </div>
                     <div class="col-md-6">
                         <label for="S_level" class="form-label">อัพโหลดไฟล์รูป</label>
-                        <input type="file" id="S_img" class="form-control" aria-label="Upload" name="S_img" accept="image/jpeg, image/png, image/jpg">
+                        <input type="file" id="S_img" class="form-control" aria-label="Upload" name="S_img" accept="image/jpeg, image/png, image/jpg" required>
                     </div>
                     <!-- สิ้นสุดการป้อนข้อมูลส่วนตัวของนักเรียน -->
 
                     <!-- ส่วนที่ 3 ป้อนข้อมูลติดต่อฉุกเฉิน -->
-                    <div class="col-md-12" style="text-align: center ; background-color: red">
+                    <div class="col-md-12 py-3" style="text-align: center ; ">
                         <h1>ข้อมูลติดต่อฉุกเฉิน</h1>
                     </div>
                     <div class="col-md-6">

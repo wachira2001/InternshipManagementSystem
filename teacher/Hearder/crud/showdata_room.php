@@ -48,8 +48,8 @@ $conn = null;
     <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
-    <title>หน้าแรก</title>
-    <link rel="icon" type="image/png" href="../../assets/icon/ic-home.png">
+    <title>ข้อมูลห้องเรียน</title>
+    <link rel="icon" type="image/png" href="../../../upload_img/1.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -113,7 +113,7 @@ $conn = null;
                     </li>
                     <li class="sidebar-dropdown active">
                         <a href="#">
-                            <i class="bi bi-handbag"></i>
+                            <i class="bi bi-folder2"></i>
                             <span class="menu-text">ข้อมูลทั่วไป</span>
                         </a>
                         <div class="sidebar-submenu">
@@ -169,7 +169,7 @@ $conn = null;
             <!-- ส่วนเริ่มต้นของการหลีกเลี่ยงข้อผิดพลาด -->
             <ol class="breadcrumb d-md-flex d-none" >
                 <li class="breadcrumb-item">
-                    <i class="bi bi-house"></i>
+                    <i class="bi bi-folder2"></i>
                     <a href="../../index.php">ข้อมูลทั่วไป</a>
                 </li>
                 <li class="breadcrumb-item breadcrumb-active" aria-current="page">ข้อมูลห้องเรียน</li>
@@ -195,9 +195,8 @@ $conn = null;
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userSettings">
                                 <!-- คำสั่งการดำเนินการในโปรไฟล์ -->
                                 <div class="header-profile-actions">
-                                    <a href="profile.html">โปรไฟล์</a>
-                                    <a href="account-settings.html">การตั้งค่า</a>
-                                    <a href="../../database/logout.php">ออกจากระบบ</a>
+                                    <a href="../../crud/editFrom_profile.php">โปรไฟล์</a>
+                                    <a href="../../../config/logout.php">ออกจากระบบ</a>
                                 </div>
                                 <!-- ส่วนจบของคำสั่งการดำเนินการในโปรไฟล์ -->
                             </div>

@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.3.4/sweetalert2.min.css">
 
     <title>login</title>
+    <link rel="icon" type="image/png" href="upload_img/1.jpg">
 </head>
 <body>
 

@@ -49,8 +49,8 @@ $conn = null;
     <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
-    <title>หน้าแรก</title>
-    <link rel="icon" type="image/png" href="../../assets/icon/ic-home.png">
+    <title>ข้อมูลสถานประกอบการ</title>
+    <link rel="icon" type="image/png" href="../../../upload_img/1.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -114,7 +114,7 @@ $conn = null;
                     </li>
                     <li class="sidebar-dropdown active">
                         <a href="#">
-                            <i class="bi bi-handbag"></i>
+                            <i class="bi bi-folder2"></i>
                             <span class="menu-text">ข้อมูลทั่วไป</span>
                         </a>
                         <div class="sidebar-submenu">
@@ -168,7 +168,7 @@ $conn = null;
             <!-- ส่วนเริ่มต้นของการหลีกเลี่ยงข้อผิดพลาด -->
             <ol class="breadcrumb d-md-flex d-none" >
                 <li class="breadcrumb-item">
-                    <i class="bi bi-house"></i>
+                    <i class="bi bi-folder2"></i>
                     <a href="../../index.php">ข้อมูลทั่วไป</a>
                 </li>
                 <li class="breadcrumb-item breadcrumb-active" aria-current="page">ข้อมูลสถานประกอบการ</li>
@@ -242,7 +242,14 @@ $conn = null;
 
                                     <td>
                                         <a href="editFrom_company.php?company_ID=<?=$company['company_ID'];?>"><button class="btn btn-primary">แก้ไข</button></a>
-                                        <a href="services/delete_user.php?company_ID=<?=$company['company_ID'];?>"><button class="btn btn-danger">ลบ</button></a>
+<!--                                        <a href="#" onclick="deleteData();">-->
+<!--                                            <button class="btn btn-danger" type="button">ลบ</button>-->
+                                        </a>
+<!--                                        <a data-id="--><?php //=$company['company_ID'];?><!--" href="?company_ID=--><?php //=$company['company_ID'];?><!--"-->
+<!--                                           class="btn btn-danger delete-btn">ลบ</a>-->
+
+                                        <button class="btn btn-danger delete-btn" data-company_ID="<?=$company['company_ID'];?>">ลบ</button>
+
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -286,5 +293,60 @@ $conn = null;
 
     <!-- ไฟล์ JavaScript หลัก -->
     <script src="../../../assets/js/main.js"></script>
+    <script>
+        // เมื่อคลิกที่ปุ่มที่มี class "delete-btn"
+        $(".delete-btn").click(function(e) {
+            // ดึงค่า 'company_ID' จาก attribute 'data-company_ID'
+            var company_ID = $(this).data('company_ID');
+
+            // ป้องกันการทำงานของการคลิกที่ปกติ
+            e.preventDefault();
+
+            // เรียกฟังก์ชัน deleteConfirm และส่งค่า 'company_ID' ไป
+            deleteConfirm(company_ID);
+        });
+        console.log(company_ID);
+        // ฟังก์ชันที่ใช้สำหรับแสดง SweetAlert2 และทำการลบข้อมูล
+        function deleteConfirm(company_ID) {
+            Swal.fire({
+                title: 'คุณแน่หรือไม่ ?',
+                text: "คุณต้องการลบข้อมูลใช่ไม? ",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ยกเลิก, ใช่ ลบ ',
+                showLoaderOnConfirm: true,
+                preConfirm: function() {
+                    // ส่ง request ไปที่ 'index.php' เพื่อลบข้อมูล
+                    return new Promise(function(resolve) {
+                        $.ajax({
+                            url: '../../services_teacher/delete_company.php',
+                            type: 'GET',
+                            data: 'company_ID=' + company_ID,
+                        })
+                            .done(function() {
+                                // แสดง SweetAlert2 ว่าลบข้อมูลสำเร็จ
+                                Swal.fire({
+                                    title: 'Success',
+                                    text: 'ลบข้อมูลเรียบร้อย',
+                                    icon: 'success',
+                                }).then(() => {
+                                    // รีเฟรชหน้า 'index.php'
+                                    document.location.href = 'showdata_company.php';
+                                })
+                            })
+                            .fail(function() {
+                                // แสดง SweetAlert2 กรณีเกิดข้อผิดพลาดในการลบข้อมูล
+                                Swal.fire('เกิดข้อผิดพลาด', 'Something went wrong with ajax !', 'error')
+                                // รีโหลดหน้า
+                                window.location.reload();
+                            });
+                    });
+                },
+            });
+        }
+
+    </script>
+
 </body>
 </html>

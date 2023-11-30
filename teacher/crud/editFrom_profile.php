@@ -50,8 +50,8 @@ $conn = null;
         <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
         <meta property="og:type" content="Website">
         <meta property="og:site_name" content="Bootstrap Gallery">
-        <title>แก้ไขข้อมูลโปรไฟล์</title>
-        <link rel="icon" type="image/png" href="../../assets/icon/ic-home.png">
+        <title>แก้ไขข้อมูลส่วนตัว</title>
+        <link rel="icon" type="image/png" href="../../upload_img/1.jpg">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -107,18 +107,20 @@ $conn = null;
                 <div class="sidebarMenuScroll">
                     <ul>
                         <li class="">
-                            <a href="../../index.php">
+                            <a href="../index.php">
                                 <i class="bi bi-house"></i>
                                 <span class="menu-text">หน้าแรก</span>
                             </a>
                         </li>
-                        <li class="sidebar-dropdown">
+                        <li class="sidebar-dropdown ">
                             <a href="#">
-                                <i class="bi bi-handbag"></i>
+                                <i class="bi bi-folder2"></i>
                                 <span class="menu-text">ข้อมูลทั่วไป</span>
                             </a>
                             <div class="sidebar-submenu">
                                 <ul>
+
+
                                     <?php
                                     if ($user['T_status'] == '1' ) {
                                         ?>
@@ -127,13 +129,13 @@ $conn = null;
                                             <a href="../Hearder/crud/showdata_major.php">ข้อมูลแผนก</a>
                                         </li>
                                         <li>
-                                            <a href="../Hearder/crud/showdata_teacher.php" >ข้อมูลบุคลากร</a>
+                                            <a href="../Hearder/crud/showdata_teacher.php">ข้อมูลบุคลากร</a>
                                         </li>
                                         <li>
-                                            <a href="../Hearder/crud/showdata_student.php">ข้อมูลนักศึกษา</a>
+                                            <a href="../Hearder/crud/showdata_student.php" >ข้อมูลนักศึกษา</a>
                                         </li>
                                         <li>
-                                            <a href="../Hearder/crud/showdata_room.php" >ข้อมูลห้องเรียน</a>
+                                            <a href="../Hearder/crud/showdata_room.php">ข้อมูลห้องเรียน</a>
                                         </li>
                                         <li>
                                             <a href="../Hearder/crud/showdata_company.php" >ข้อมูลสถานประกอบการ</a>
@@ -144,7 +146,10 @@ $conn = null;
 
                                         ?>
                                         <li>
-                                            <a href="../Hearder/crud/showdata_student.php">ข้อมูลนักศึกษา</a>
+                                            <a href="showdata_room.php" >ข้อมูลห้องเรียน</a>
+                                        </li>
+                                        <li>
+                                            <a href="showdata_student.php" >ข้อมูลนักศึกษา</a>
                                         </li>
                                         <?php
                                     }
@@ -168,7 +173,7 @@ $conn = null;
                 <!-- ส่วนเริ่มต้นของการหลีกเลี่ยงข้อผิดพลาด -->
                 <ol class="breadcrumb d-md-flex d-none" >
                     <li class="breadcrumb-item">
-                        <i class="bi bi-house"></i>
+                        <i class="bi bi-folder2"></i>
                         <a href="#">แก้ไขข้อมูลส่วนตัว</a>
                     </li>
                 </ol>
@@ -193,8 +198,7 @@ $conn = null;
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userSettings">
                                     <!-- คำสั่งการดำเนินการในโปรไฟล์ -->
                                     <div class="header-profile-actions">
-                                        <a href="profile.html">โปรไฟล์</a>
-                                        <a href="account-settings.html">การตั้งค่า</a>
+                                        <a href="editFrom_profile.php">โปรไฟล์</a>
                                         <a href="../../config/logout.php">ออกจากระบบ</a>
                                     </div>
                                     <!-- ส่วนจบของคำสั่งการดำเนินการในโปรไฟล์ -->

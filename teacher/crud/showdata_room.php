@@ -1,6 +1,6 @@
 <?php
-require_once '../../services_teacher/conndb.php';
-require_once '../../../config/show_data.php';
+require_once '../services_teacher/conndb.php';
+require_once '../../config/show_data.php';
 // ตรวจสอบ session
 session_start();
 echo '
@@ -9,7 +9,7 @@ echo '
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert-dev.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">';
 
-if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'H')) {
+if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'H' && $_SESSION['role'] !== 'T')) {
     echo '
             <script>
             setTimeout(function() {
@@ -25,13 +25,11 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'H')) {
 }
 
 $user = getuserT($conn,$_SESSION['username']);
-$userT = getteacherall($conn);
 $stmtD = getmajor($conn);
-
-
-$conn = null;
-//print_r($user);
+$room = getroomToTID($conn,$_SESSION['data']['T_ID']);
+//print_r($room);
 //return;
+$conn = null;
 ?>
 
 
@@ -50,8 +48,8 @@ $conn = null;
     <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
-    <title>ข้อมูลบุคลากร</title>
-    <link rel="icon" type="image/png" href="../../../upload_img/1.jpg">
+    <title>ข้อมูลห้อง</title>
+    <link rel="icon" type="image/png" href="../../upload_img/1.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -65,11 +63,11 @@ $conn = null;
         }
     </style>
 
-    <link rel="stylesheet" href="../../../assets/css/animate.css">
+    <link rel="stylesheet" href="../../assets/css/animate.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.3.4/sweetalert2.min.css">
-    <link rel="stylesheet" href="../../../assets/fonts/bootstrap/bootstrap-icons.css">
-    <link rel="stylesheet" href="../../../assets/css/main.min.css">
-    <link rel="stylesheet" href="../../../assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="../../assets/fonts/bootstrap/bootstrap-icons.css">
+    <link rel="stylesheet" href="../../assets/css/main.min.css">
+    <link rel="stylesheet" href="../../assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
 
 </head>
 
@@ -97,7 +95,7 @@ $conn = null;
         <div class="sidebar-brand">
             <a href="../../index.php" class="logo">
                 <span class="avatar">
-                    <img src="../../../upload_img/<?php echo $stmtD['M_img'];?>" alt="Admin Dashboards" style="width: auto;height: 100px"/>
+                    <img src="../../upload_img/<?php echo $stmtD['M_img'];?>" alt="Admin Dashboards" style="width: auto;height: 100px"/>
                 </span>
             </a>
         </div>
@@ -127,19 +125,19 @@ $conn = null;
                                     ?>
 
                                     <li>
-                                        <a href="showdata_major.php">ข้อมูลแผนก</a>
+                                        <a href="../Hearder/crud/showdata_major.php">ข้อมูลแผนก</a>
                                     </li>
                                     <li>
-                                        <a href="showdata_teacher.php" class="current-page">ข้อมูลบุคลากร</a>
+                                        <a href="../Hearder/crud/showdata_teacher.php">ข้อมูลบุคลากร</a>
                                     </li>
                                     <li>
-                                        <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
+                                        <a href="../Hearder/crud/showdata_student.php" >ข้อมูลนักศึกษา</a>
                                     </li>
                                     <li>
-                                        <a href="showdata_room.php">ข้อมูลห้องเรียน</a>
+                                        <a href="../Hearder/crud/showdata_room.php">ข้อมูลห้องเรียน</a>
                                     </li>
                                     <li>
-                                        <a href="showdata_company.php" >ข้อมูลสถานประกอบการ</a>
+                                        <a href="../Hearder/crud/showdata_company.php" >ข้อมูลสถานประกอบการ</a>
                                     </li>
 
                                     <?php
@@ -147,7 +145,10 @@ $conn = null;
 
                                     ?>
                                     <li>
-                                        <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
+                                        <a href="showdata_room.php" class="current-page">ข้อมูลห้องเรียน</a>
+                                    </li>
+                                    <li>
+                                        <a href="showdata_student.php" >ข้อมูลนักศึกษา</a>
                                     </li>
                                     <?php
                                 }
@@ -174,7 +175,7 @@ $conn = null;
                     <i class="bi bi-folder2"></i>
                     <a href="../../index.php">ข้อมูลทั่วไป</a>
                 </li>
-                <li class="breadcrumb-item breadcrumb-active" aria-current="page">ข้อมูลบุคลากร</li>
+                <li class="breadcrumb-item breadcrumb-active" aria-current="page">ข้อมูลห้องเรียน</li>
             </ol>
             <div class="header-actions-container">
                 <!-- เริ่มต้นของการกระทำของส่วนหัวเรื่อง -->
@@ -188,7 +189,7 @@ $conn = null;
                                 <span class="user-name d-none d-md-block"><?php echo $user['T_fname']; ?></span>
                                 <!-- รูปประจำตัว -->
                                 <span class="avatar">
-                                <img src="../../img/<?php echo $user['T_img']; ?>" alt="Admin Templates">
+                                <img src="../img/<?php echo $user['T_img']; ?>" alt="Admin Templates">
                                     <!-- สถานะออนไลน์ -->
                                 <span class="status online"></span>
                             </span>
@@ -197,8 +198,8 @@ $conn = null;
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userSettings">
                                 <!-- คำสั่งการดำเนินการในโปรไฟล์ -->
                                 <div class="header-profile-actions">
-                                    <a href="../../crud/editFrom_profile.php">โปรไฟล์</a>
-                                    <a href="../../database/logout.php">ออกจากระบบ</a>
+                                    <a href="editFrom_profile.php">โปรไฟล์</a>
+                                    <a href="../../config/logout.php">ออกจากระบบ</a>
                                 </div>
                                 <!-- ส่วนจบของคำสั่งการดำเนินการในโปรไฟล์ -->
                             </div>
@@ -224,36 +225,38 @@ $conn = null;
                         <table class="table m-0">
                             <thead>
                             <tr>
-                                <th>รหัสนักบุคลากร</th>
-                                <th>ชื่อ</th>
-                                <th>สกุล</th>
-                                <th>ตำแหน่ง</th>
-                                <th>E-mail</th>
-                                <th>เพศ</th>
-                                <th>เบอร์โทร</th>
+
+                                <th>รหัสห้องเรียน</th>
+                                <th>สาขา</th>
+                                <th>ชั้น</th>
+                                <th>ปี</th>
+                                <th>ชื่อครูที่ปรึกษา</th>
+                                <th>ชื่อนักเรียน</th>
                                 <th> </th>
                                 <th> </th>
                                 <th> </th>
                                 <th> </th>
                                 <th> </th>
+
                             </tr>
                             </thead>
                             <tbody>
-                            <?php foreach ($userT as $teacher) { ?>
+                            <?php foreach ($room as $rooms) { ?>
                                 <tr>
-                                    <th><?=$teacher['T_ID'];?></th>
-                                    <td><?=$teacher['T_fname'];?></td>
-                                    <td><?=$teacher['T_lname'];?></td>
-                                    <td><?=$teacher['T_position'];?></td>
-                                    <td><?=$teacher['T_email'];?></td>
-                                    <td><?=$teacher['T_gender'];?></td>
-                                    <td><?=$teacher['T_phone'];?></td>
+                                    <th><?=$rooms['R_ID'];?></th>
+                                    <td><?=$rooms['S_major'];?></td>
+                                    <td><?=$rooms['R_level'];?></td>
+                                    <td><?=$rooms['R_year'];?></td>
+                                    <td><?=$rooms['T_fname'];?></td>
+                                    <td><?=$rooms['S_fname'];?></td>
+
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
+
                                     <td >
-                                        <a href="editFrom_teacher.php?T_ID=<?=$teacher['T_ID'];?>"><button class="btn btn-primary">แก้ไข</button></a>
+<!--                                        <a href="editFrom_room.php?R_ID=--><?php //=$rooms['R_ID'];?><!--"><button class="btn btn-primary">แก้ไข</button></a>-->
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -282,20 +285,20 @@ $conn = null;
     <!-- ส่วนจบของหน้า -->
 
     <!-- เริ่มต้นของไฟล์ JavaScript ที่จำเป็น -->
-    <script src="../../../assets/js/jquery.min.js"></script>
-    <script src="../../../assets/js/bootstrap.bundle.min.js"></script>
-    <script src="../../../assets/js/modernizr.js"></script>
-    <script src="../../../assets/js/moment.js"></script>
+    <script src="../../assets/js/jquery.min.js"></script>
+    <script src="../../assets/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/modernizr.js"></script>
+    <script src="../../assets/js/moment.js"></script>
 
     <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->
-    <script src="../../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
-    <script src="../../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-    <script src="../../../assets/vendor/apex/apexcharts.min.js"></script>
-    <script src="../../../assets/vendor/apex/custom/sales/salesGraph.js"></script>
-    <script src="../../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>
-    <script src="../../../assets/vendor/apex/custom/sales/taskGraph.js"></script>
+    <script src="../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
+    <script src="../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
+    <script src="../../assets/vendor/apex/apexcharts.min.js"></script>
+    <script src="../../assets/vendor/apex/custom/sales/salesGraph.js"></script>
+    <script src="../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>
+    <script src="../../assets/vendor/apex/custom/sales/taskGraph.js"></script>
 
     <!-- ไฟล์ JavaScript หลัก -->
-    <script src="../../../assets/js/main.js"></script>
+    <script src="../../assets/js/main.js"></script>
 </body>
 </html>
