@@ -1,6 +1,6 @@
 <?php
-require_once '../../../config/conndb.php';
-require_once '../../../config/show_data.php';
+include_once '../../../config/conndb.php';
+include_once '../../../config/show_data.php';
 // ตรวจสอบ session
 session_start();
 echo '
@@ -25,8 +25,6 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'H')) {
 }
 $user = getuserT($conn,$_SESSION['username']);
 $major = getmajor($conn);
-// ปิดการเชื่อมต่อ
-$conn = null;
 //print_r($major);
 //return;
 ?>
@@ -48,7 +46,7 @@ $conn = null;
         <meta property="og:type" content="Website">
         <meta property="og:site_name" content="Bootstrap Gallery">
         <title>แก้ไขข้อมูลแผนก</title>
-        <link rel="icon" type="image/png" href="../../assets/icon/ic-home.png">
+        <link rel="icon" type="image/png" href="../../../upload_img/<?php echo $major['M_img'];?>">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -91,7 +89,7 @@ $conn = null;
 
             <!-- ส่วนเริ่มต้นของแบรนด์ในไซด์บาร์ -->
             <div class="sidebar-brand">
-                <a href="../index.php" class="logo">
+                <a href="../../index.php" class="logo">
                 <span class="avatar">
                     <img src="../../../upload_img/<?php echo $major['M_img'];?>" alt="Admin Dashboards" style="width: auto;height: 100px"/>
                 </span>
@@ -111,39 +109,45 @@ $conn = null;
                         </li>
                         <li class="sidebar-dropdown active">
                             <a href="#">
-                                <i class="bi bi-handbag"></i>
+                                <i class="bi bi-folder2"></i>
                                 <span class="menu-text">ข้อมูลทั่วไป</span>
                             </a>
                             <div class="sidebar-submenu">
                                 <ul>
-
-
                                     <?php
+                                    // เงื่อนไขเพื่อตรวจสอบบทบาท
                                     if ($user['T_status'] == '1' ) {
                                         ?>
-
-                                        <li>
-                                            <a href="showdata_major.php" class="current-page">ข้อมูลแผนก</a>
-                                        </li>
                                         <li>
                                             <a href="showdata_teacher.php" >ข้อมูลบุคลากร</a>
                                         </li>
                                         <li>
-                                            <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
+                                            <a href="showdata_student.php" >ข้อมูลนักศึกษา</a>
                                         </li>
                                         <li>
-                                            <a href="showdata_room.php" >ข้อมูลห้องเรียน</a>
+                                            <a href="showdata_major.php" class="current-page">ข้อมูลแผนก</a>
+                                        </li>
+                                        <li>
+                                            <a href="showdata_room.php">ข้อมูลห้องเรียน</a>
                                         </li>
                                         <li>
                                             <a href="showdata_company.php" >ข้อมูลสถานประกอบการ</a>
                                         </li>
-
+                                        <li>
+                                            <a href="showdata_request.php" >อนุมัติคำร้อง</a>
+                                        </li>
                                         <?php
                                     }else{
 
                                         ?>
                                         <li>
-                                            <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
+                                            <a href="../crud/showdata_student.php" >ข้อมูลนักศึกษา</a>
+                                        </li>
+                                        <li>
+                                            <a href="../crud/showdata_room.php">ข้อมูลห้องเรียน</a>
+                                        </li>
+                                        <li>
+                                            <a href="../crud/showdata_request.php">อนุมัติคำร้อง</a>
                                         </li>
                                         <?php
                                     }
@@ -166,7 +170,7 @@ $conn = null;
                 <!-- ส่วนเริ่มต้นของการหลีกเลี่ยงข้อผิดพลาด -->
                 <ol class="breadcrumb d-md-flex d-none" >
                     <li class="breadcrumb-item">
-                        <i class="bi bi-house"></i>
+                        <i class="bi bi-folder2"></i>
                         <a href="#">ข้อมูลทั่วไป</a>
                     </li>
                     <li class="breadcrumb-item breadcrumb-active" aria-current="page">
@@ -255,7 +259,7 @@ $conn = null;
                                                 <div class="">
                                                     <label for="inputName" class="form-label">ชื่อแผนก</label>
                                                     <input type="text" class="form-control" id="inputName" placeholder="ชื่อแผนก" name="M_Name"
-                                                           value="<?=$major['M_Name'];?>" >
+                                                           value="<?=$major['M_Name'];?>">
                                                 </div>
                                             </div>
                                             <div class="col-12 py-2">
@@ -314,13 +318,13 @@ $conn = null;
         <script src="../../../assets/js/modernizr.js"></script>
         <script src="../../../assets/js/moment.js"></script>
 
-        <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->
-        <script src="../../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
-        <script src="../../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-        <script src="../../../assets/vendor/apex/apexcharts.min.js"></script>
-        <script src="../../../assets/vendor/apex/custom/sales/salesGraph.js"></script>
-        <script src="../../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>
-        <script src="../../../assets/vendor/apex/custom/sales/taskGraph.js"></script>
+<!--        <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->
+<!--        <script src="../../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>-->
+<!--        <script src="../../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>-->
+<!--        <script src="../../../assets/vendor/apex/apexcharts.min.js"></script>-->
+<!--        <script src="../../../assets/vendor/apex/custom/sales/salesGraph.js"></script>-->
+<!--        <script src="../../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>-->
+<!--        <script src="../../../assets/vendor/apex/custom/sales/taskGraph.js"></script>-->
 
         <!-- ไฟล์ JavaScript หลัก -->
         <script src="../../../assets/js/main.js"></script>
@@ -388,4 +392,5 @@ $conn = null;
     </html>
 <?php
 require_once '../../services_teacher/edit_major.php';
+$conn = null;
 ?>

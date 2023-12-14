@@ -27,8 +27,9 @@ $user = getuserT($conn,$_SESSION['username']);
 $major = getmajor($conn);
 $S_ID = $_GET['S_ID'];
 $student = getstudent($conn,$S_ID);
+$getroom = getroomall($conn);
 // ปิดการเชื่อมต่อ
-$conn = null;
+
 //print_r($student);
 //return;
 ?>
@@ -50,7 +51,7 @@ $conn = null;
         <meta property="og:type" content="Website">
         <meta property="og:site_name" content="Bootstrap Gallery">
         <title>แก้ไขข้อมูลแผนก</title>
-        <link rel="icon" type="image/png" href="../../assets/icon/ic-home.png">
+        <link rel="icon" type="image/png" href="../../../upload_img/<?php echo $major['M_img'];?>">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -93,7 +94,7 @@ $conn = null;
 
             <!-- ส่วนเริ่มต้นของแบรนด์ในไซด์บาร์ -->
             <div class="sidebar-brand">
-                <a href="../index.php" class="logo">
+                <a href="../../index.php" class="logo">
                 <span class="avatar">
                     <img src="../../../upload_img/<?php echo $major['M_img'];?>" alt="Admin Dashboards" style="width: auto;height: 100px"/>
                 </span>
@@ -113,23 +114,23 @@ $conn = null;
                         </li>
                         <li class="sidebar-dropdown active">
                             <a href="#">
-                                <i class="bi bi-handbag"></i>
+                                <i class="bi bi-folder2"></i>
                                 <span class="menu-text">ข้อมูลทั่วไป</span>
                             </a>
                             <div class="sidebar-submenu">
                                 <ul>
                                     <?php
+                                    // เงื่อนไขเพื่อตรวจสอบบทบาท
                                     if ($user['T_status'] == '1' ) {
                                         ?>
-
                                         <li>
-                                            <a href="showdata_major.php" >ข้อมูลแผนก</a>
-                                        </li>
-                                        <li>
-                                            <a href="showdata_teacher.php">ข้อมูลบุคลากร</a>
+                                            <a href="showdata_teacher.php" >ข้อมูลบุคลากร</a>
                                         </li>
                                         <li>
                                             <a href="showdata_student.php" class="current-page">ข้อมูลนักศึกษา</a>
+                                        </li>
+                                        <li>
+                                            <a href="showdata_major.php">ข้อมูลแผนก</a>
                                         </li>
                                         <li>
                                             <a href="showdata_room.php">ข้อมูลห้องเรียน</a>
@@ -137,18 +138,25 @@ $conn = null;
                                         <li>
                                             <a href="showdata_company.php" >ข้อมูลสถานประกอบการ</a>
                                         </li>
-
+                                        <li>
+                                            <a href="showdata_request.php" >อนุมัติคำร้อง</a>
+                                        </li>
                                         <?php
                                     }else{
 
                                         ?>
                                         <li>
-                                            <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
+                                            <a href="../crud/showdata_student.php" >ข้อมูลนักศึกษา</a>
+                                        </li>
+                                        <li>
+                                            <a href="../crud/showdata_room.php">ข้อมูลห้องเรียน</a>
+                                        </li>
+                                        <li>
+                                            <a href="../crud/showdata_request.php">อนุมัติคำร้อง</a>
                                         </li>
                                         <?php
                                     }
                                     ?>
-
                                 </ul>
                             </div>
                         </li>
@@ -167,14 +175,14 @@ $conn = null;
                 <!-- ส่วนเริ่มต้นของการหลีกเลี่ยงข้อผิดพลาด -->
                 <ol class="breadcrumb d-md-flex d-none" >
                     <li class="breadcrumb-item">
-                        <i class="bi bi-handbag"></i>
+                        <i class="bi bi-folder2"></i>
                         <a href="#">ข้อมูลทั่วไป</a>
                     </li>
                     <li class="breadcrumb-item breadcrumb-active" aria-current="page">
-                        <a href="showdata_major.php">ข้อมูลนักศึกษา</a>
+                        <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
                     </li>
                     <li class="breadcrumb-item breadcrumb-active" aria-current="page">
-                        <a href="showdata_major.php">แก้ข้อมูลนักศึกษา</a>
+                        <a >แก้ข้อมูลนักศึกษา</a>
                     </li>
                 </ol>
                 <div class="header-actions-container">
@@ -325,17 +333,23 @@ $conn = null;
                                                 <input type="text" class="form-control" id="inputName" name="S_major"
                                                        placeholder="แผนก"
                                                        value="<?= $student['S_major']; ?>" readonly>
-
                                             </div>
-                                            <div class="col-2 py-3">
-                                                <label for="inputName" class="form-label">ระดับชั้น</label>
-                                                <input type="text" class="form-control" id="inputName" name="S_level"
-                                                       placeholder="ระดับชั้น"
-                                                       value="<?= $student['S_level']; ?>" readonly>
-
+                                            <div class="col-4 py-3">
+                                                <div class="mb-3">
+                                                    <label for="R_ID" class="form-label">ห้องประจำชั้น</label>
+                                                    <select name="R_ID" id="R_ID" class="form-select" required>
+                                                        <?php foreach ($getroom as $room) : ?>
+                                                            <?php
+                                                            // เช็คว่า T_ID ของครูนี้เท่ากับ T_ID ที่ต้องการให้เป็นค่าเริ่มต้นหรือไม่
+                                                            $selected = ($student['R_ID'] == $room['R_ID']) ? 'selected' : '';
+                                                            ?>
+                                                            <option name="R_ID" value="<?php echo $room['R_ID']; ?>" <?php echo $selected; ?>>
+                                                                <?php echo $room['R_level']; ?>. <?php echo $room['R_room']; ?> ห้อง <?php echo $room['R_level_numder']; ?>
+                                                            </option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
                                             </div>
-
-
 
                                             <div class="col-3 py-3">
                                                 <label for="inputName" class="form-label">ครูที่ปรึกษา</label>
@@ -433,40 +447,18 @@ $conn = null;
         <script src="../../../assets/js/modernizr.js"></script>
         <script src="../../../assets/js/moment.js"></script>
 
-        <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->
-        <script src="../../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
-        <script src="../../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-        <script src="../../../assets/vendor/apex/apexcharts.min.js"></script>
-        <script src="../../../assets/vendor/apex/custom/sales/salesGraph.js"></script>
-        <script src="../../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>
-        <script src="../../../assets/vendor/apex/custom/sales/taskGraph.js"></script>
+<!--        <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->
+<!--        <script src="../../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>-->
+<!--        <script src="../../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>-->
+<!--        <script src="../../../assets/vendor/apex/apexcharts.min.js"></script>-->
+<!--        <script src="../../../assets/vendor/apex/custom/sales/salesGraph.js"></script>-->
+<!--        <script src="../../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>-->
+<!--        <script src="../../../assets/vendor/apex/custom/sales/taskGraph.js"></script>-->
 
         <!-- ไฟล์ JavaScript หลัก -->
         <script src="../../../assets/js/main.js"></script>
         <script>
-            document.getElementById('imageInput').addEventListener('change', function (e) {
-                var preview = document.getElementById('previewImage');
-                var file = e.target.files[0];
-                var reader = new FileReader();
 
-                reader.onloadend = function () {
-                    preview.src = reader.result;
-                };
-
-                if (file) {
-                    reader.readAsDataURL(file);
-                } else {
-                    preview.src = "#";
-                }
-            });
-
-            // เมื่อกดปุ่ม "บันทึก" หรือ "อัพโหลดใหม่"
-            function saveImage() {
-                // ส่งข้อมูลรูปภาพไปยังเซิร์ฟเวอร์
-                // ทำการอัพเดทในฐานข้อมูล
-                // หลังจากอัพเดทสำเร็จ, ทำการแทนที่รูปภาพเก่าด้วยรูปภาพใหม่
-                document.getElementById('currentImage').src = document.getElementById('previewImage').src;
-            }
             function showConfirmation() {
                 // แสดง SweetAlert หรือโค้ดที่ใช้ในการยืนยันก่อนที่จะยกเลิก
                 Swal.fire({
@@ -503,7 +495,45 @@ $conn = null;
             }
 
         </script>
-
+        <script>
+            // ฟังก์ชันสำหรับลบข้อมูล
+            function deleteData(id) {
+                Swal.fire({
+                    title: 'คุณต้องการลบหรือไม่?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ตกลง'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // ถ้ากดตกลง, ส่ง request ไปยังไฟล์ PHP ที่ใช้สำหรับการลบข้อมูล
+                        fetch('delete_data.php', {
+                            method: 'POST',
+                            body: new URLSearchParams('id=' + id),
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            }
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    Swal.fire('ลบเรียบร้อยแล้ว!', '', 'success').then(() => {
+                                        // หลังจากลบเสร็จ, รีโหลดหน้าเพื่อแสดงข้อมูลอัพเดท
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire('มีข้อผิดพลาดในการลบข้อมูล', '', 'error');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                Swal.fire('มีข้อผิดพลาดในการลบข้อมูล', '', 'error');
+                            });
+                    }
+                });
+            }
+        </script>
 
 
 
@@ -511,4 +541,5 @@ $conn = null;
     </html>
 <?php
 require_once '../../services_teacher/update_student.php';
+$conn = null;
 ?>

@@ -5,9 +5,10 @@ require_once '../../../config/show_data.php';
 session_start();
 echo '
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert-dev.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">';
+
 
 if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'H')) {
     echo '
@@ -24,7 +25,7 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'H')) {
     exit();
 }
 
-$userT = getuserT($conn,$_SESSION['username']);
+$user = getuserT($conn, $_SESSION['username']);
 $userS = getstudenall($conn);
 $stmtD = getmajor($conn);
 // ปิดการเชื่อมต่อ
@@ -32,9 +33,6 @@ $conn = null;
 //print_r($user);
 //return;
 ?>
-
-
-
 
 <!doctype html>
 <html lang="en">
@@ -50,15 +48,16 @@ $conn = null;
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
     <title>ข้อมูลนักศึกษา</title>
-    <link rel="icon" type="image/png" href="../../../upload_img/1.jpg">
+    <link rel="icon" type="image/png" href="../../../upload_img/<?php echo $stmtD['M_img']; ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
     <style>
-        #fonts{
+        #fonts {
             font-family: 'Mitr', sans-serif;
         }
-        #fonts_b{
+
+        #fonts_b {
             font-family: 'Mitr', sans-serif;
             font-weight: bolder;
         }
@@ -70,10 +69,10 @@ $conn = null;
     <link rel="stylesheet" href="../../../assets/css/main.min.css">
     <link rel="stylesheet" href="../../../assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
 
+
 </head>
 
 <body id="fonts">
-
 <!-- ส่วนเริ่มต้นของการโหลด -->
 <div id="loading-wrapper">
     <div class="spinner">
@@ -96,7 +95,8 @@ $conn = null;
         <div class="sidebar-brand">
             <a href="../../index.php" class="logo">
                 <span class="avatar">
-                    <img src="../../../upload_img/<?php echo $stmtD['M_img'];?>" alt="Admin Dashboards" style="width: auto;height: 100px"/>
+                    <img src="../../../upload_img/<?php echo $stmtD['M_img']; ?>" alt="Admin Dashboards"
+                         style="width: auto;height: 100px"/>
                 </span>
             </a>
         </div>
@@ -119,20 +119,18 @@ $conn = null;
                         </a>
                         <div class="sidebar-submenu">
                             <ul>
-
-
                                 <?php
-                                if ($userT['T_status'] == '1' ) {
+                                // เงื่อนไขเพื่อตรวจสอบบทบาท
+                                if ($user['T_status'] == '1' ) {
                                     ?>
-
                                     <li>
-                                        <a href="showdata_major.php">ข้อมูลแผนก</a>
-                                    </li>
-                                    <li>
-                                        <a href="showdata_teacher.php">ข้อมูลบุคลากร</a>
+                                        <a href="showdata_teacher.php" >ข้อมูลบุคลากร</a>
                                     </li>
                                     <li>
                                         <a href="showdata_student.php" class="current-page">ข้อมูลนักศึกษา</a>
+                                    </li>
+                                    <li>
+                                        <a href="showdata_major.php">ข้อมูลแผนก</a>
                                     </li>
                                     <li>
                                         <a href="showdata_room.php">ข้อมูลห้องเรียน</a>
@@ -140,18 +138,25 @@ $conn = null;
                                     <li>
                                         <a href="showdata_company.php" >ข้อมูลสถานประกอบการ</a>
                                     </li>
-
+                                    <li>
+                                        <a href="showdata_request.php" >อนุมัติคำร้อง</a>
+                                    </li>
                                     <?php
                                 }else{
 
                                     ?>
                                     <li>
-                                        <a href="showdata_student.php" class="current-page">ข้อมูลนักศึกษา</a>
+                                        <a href="../crud/showdata_student.php" >ข้อมูลนักศึกษา</a>
+                                    </li>
+                                    <li>
+                                        <a href="../crud/showdata_room.php">ข้อมูลห้องเรียน</a>
+                                    </li>
+                                    <li>
+                                        <a href="../crud/showdata_request.php">อนุมัติคำร้อง</a>
                                     </li>
                                     <?php
                                 }
                                 ?>
-
                             </ul>
                         </div>
                     </li>
@@ -168,10 +173,10 @@ $conn = null;
         <div class="page-header">
             <div class="toggle-sidebar" id="toggle-sidebar"><i class="bi bi-list"></i></div>
             <!-- ส่วนเริ่มต้นของการหลีกเลี่ยงข้อผิดพลาด -->
-            <ol class="breadcrumb d-md-flex d-none" >
+            <ol class="breadcrumb d-md-flex d-none">
                 <li class="breadcrumb-item">
                     <i class="bi bi-folder2"></i>
-                    <a href="../index.php">ข้อมูลทั่วไป</a>
+                    <a href="showdata_student.php">ข้อมูลทั่วไป</a>
                 </li>
                 <li class="breadcrumb-item breadcrumb-active" aria-current="page">ข้อมูลนักศึกษา</li>
             </ol>
@@ -182,12 +187,13 @@ $conn = null;
                         <!-- เริ่มต้นของดรอปดาวน์ -->
                         <li class="dropdown">
                             <!-- ลิงค์การตั้งค่าผู้ใช้ -->
-                            <a href="#" id="userSettings" class="user-settings" data-toggle="dropdown" aria-haspopup="true">
+                            <a href="#" id="userSettings" class="user-settings" data-toggle="dropdown"
+                               aria-haspopup="true">
                                 <!-- ชื่อผู้ใช้ -->
-                                <span class="user-name d-none d-md-block"><?php echo $userT['T_fname']; ?></span>
+                                <span class="user-name d-none d-md-block"><?php echo $user['T_fname']; ?></span>
                                 <!-- รูปประจำตัว -->
                                 <span class="avatar">
-                                <img src="../../img/<?php echo $userT['T_img'] ?>" alt="Admin Templates">
+                                <img src="../../img/<?php echo $user['T_img'] ?>" alt="Admin Templates">
                                     <!-- สถานะออนไลน์ -->
                                 <span class="status online"></span>
                             </span>
@@ -197,7 +203,7 @@ $conn = null;
                                 <!-- คำสั่งการดำเนินการในโปรไฟล์ -->
                                 <div class="header-profile-actions">
                                     <a href="../../crud/editFrom_profile.php">โปรไฟล์</a>
-                                    <a href="../../../config/logout.php">ออกจากระบบ</a>
+                                    <a href="#" onclick="showConfirmationLogout()">ออกจากระบบ</a>
                                 </div>
                                 <!-- ส่วนจบของคำสั่งการดำเนินการในโปรไฟล์ -->
                             </div>
@@ -227,28 +233,31 @@ $conn = null;
                                 <th>ชื่อ</th>
                                 <th>สกุล</th>
                                 <th>สาขา</th>
-                                <th>ชั้น</th>
                                 <th>ภาคเรียนที่ออกฝึกงาน</th>
                                 <th>ปีการศึกษาที่ออกฝึกงาน</th>
                                 <th>ครูที่ปรึกษา</th>
-                                <th> </th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php foreach ($userS as $student) { ?>
                                 <tr>
-                                    <th><?=$student['S_ID'];?></th>
-                                    <td><?=$student['S_fname'];?></td>
-                                    <td><?=$student['S_lname'];?></td>
-                                    <td><?=$student['S_major'];?></td>
-                                    <td><?=$student['S_level'];?></td>
-                                    <td><?=$student['S_enrollment_term'];?></td>
-                                    <th><?=$student['S_enrollment_year'];?></th>
-                                    <td><?=$student['T_fname'];?></td>
+                                    <th><?= $student['S_ID']; ?></th>
+                                    <td><?= $student['S_fname']; ?></td>
+                                    <td><?= $student['S_lname']; ?></td>
+                                    <td><?= $student['S_major']; ?></td>
+                                    <td><?= $student['S_enrollment_term']; ?></td>
+                                    <th><?= $student['S_enrollment_year']; ?></th>
+                                    <td><?= $student['T_fname']; ?></td>
 
                                     <td>
-                                        <a href="editFrom_student.php?S_ID=<?=$student['S_ID'];?>"><button class="btn btn-primary">แก้ไข</button></a>
-                                        <a href="services/delete_user.php?iduser=<?=$student['S_ID'];?>"><button class="btn btn-danger">ลบ</button></a>
+                                        <a href="editFrom_student.php?S_ID=<?= $student['S_ID']; ?>">
+                                            <button class="btn btn-primary">แก้ไข</button>
+                                        </a>
+                                        <a href="#">
+                                            <button class="btn btn-danger" onclick="deleteUser(<?= $student['S_ID']; ?>)">ลบ</button>
+                                        </a>
+
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -282,40 +291,17 @@ $conn = null;
     <script src="../../../assets/js/modernizr.js"></script>
     <script src="../../../assets/js/moment.js"></script>
 
-    <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->
-    <script src="../../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
-    <script src="../../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-    <script src="../../../assets/vendor/apex/apexcharts.min.js"></script>
-    <script src="../../../assets/vendor/apex/custom/sales/salesGraph.js"></script>
-    <script src="../../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>
-    <script src="../../../assets/vendor/apex/custom/sales/taskGraph.js"></script>
+<!--    <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->
+<!--    <script src="../../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>-->
+<!--    <script src="../../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>-->
+<!--    <script src="../../../assets/vendor/apex/apexcharts.min.js"></script>-->
+<!--    <script src="../../../assets/vendor/apex/custom/sales/salesGraph.js"></script>-->
+<!--    <script src="../../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>-->
+<!--    <script src="../../../assets/vendor/apex/custom/sales/taskGraph.js"></script>-->
 
     <!-- ไฟล์ JavaScript หลัก -->
     <script src="../../../assets/js/main.js"></script>
     <script>
-        document.getElementById('imageInput').addEventListener('change', function (e) {
-            var preview = document.getElementById('previewImage');
-            var file = e.target.files[0];
-            var reader = new FileReader();
-
-            reader.onloadend = function () {
-                preview.src = reader.result;
-            };
-
-            if (file) {
-                reader.readAsDataURL(file);
-            } else {
-                preview.src = "#";
-            }
-        });
-
-        // เมื่อกดปุ่ม "บันทึก" หรือ "อัพโหลดใหม่"
-        function saveImage() {
-            // ส่งข้อมูลรูปภาพไปยังเซิร์ฟเวอร์
-            // ทำการอัพเดทในฐานข้อมูล
-            // หลังจากอัพเดทสำเร็จ, ทำการแทนที่รูปภาพเก่าด้วยรูปภาพใหม่
-            document.getElementById('currentImage').src = document.getElementById('previewImage').src;
-        }
         function showConfirmation() {
             // แสดง SweetAlert หรือโค้ดที่ใช้ในการยืนยันก่อนที่จะยกเลิก
             Swal.fire({
@@ -334,7 +320,74 @@ $conn = null;
                 }
             });
         }
+    </script>
+    <script>
+        function deleteUser(S_ID) {
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม่?',
+                text: 'คุณต้องการลบข้อมูลนี้หรือไม่?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ใช่, ลบ!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteUserData(S_ID);
+                }
+            });
+        }
 
+        function deleteUserData(S_ID) {
+            $.ajax({
+                type: 'POST',
+                url: '../../services_teacher/delete_student.php',
+                data: { S_ID: S_ID },
+                success: function(response) {
+                    if (response === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'ลบข้อมูลสำเร็จ',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            window.location.href = 'showdata_student.php';
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาดในการลบข้อมูลเนื่องจากมีดารเชื่อมคีย์นอกแล้ว',
+                            text: 'โปรดลองอีกครั้งหรือติดต่อผู้ดูแลระบบ',
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาดในการลบข้อมูล',
+                        text: 'โปรดลองอีกครั้งหรือติดต่อผู้ดูแลระบบ',
+                    });
+                }
+            });
+        }
+        function showConfirmationLogout() {
+            // แสดง SweetAlert หรือโค้ดที่ใช้ในการยืนยันก่อนที่จะยกเลิก
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม ?',
+                text: 'ออกจากระบบ',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ออกจากระบบ',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // กระทำเมื่อยืนยัน
+                    window.location.href = '../../../config/logout.php';
+                }
+            });
+        }
     </script>
 </body>
 </html>

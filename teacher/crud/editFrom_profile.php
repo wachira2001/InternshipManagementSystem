@@ -25,6 +25,7 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'H' && $_SESSION['ro
 }
 $user = getuserT($conn,$_SESSION['username']);
 $major = getmajor($conn);
+$getroom = getroomall($conn);
 
 //print_r($user);
 //return;
@@ -51,7 +52,7 @@ $conn = null;
         <meta property="og:type" content="Website">
         <meta property="og:site_name" content="Bootstrap Gallery">
         <title>แก้ไขข้อมูลส่วนตัว</title>
-        <link rel="icon" type="image/png" href="../../upload_img/1.jpg">
+        <link rel="icon" type="image/png" href="../../upload_img/<?php echo $major['M_img'];?>">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -287,14 +288,14 @@ $conn = null;
                                                            value="<?=$user['T_phone'];?>" >
                                                 </div>
                                             </div>
-                                            <div class="col-6 py-2">
+                                            <div class="col-4 py-2">
                                                 <div class="">
                                                     <label for="inputName" class="form-label">E-mail</label>
                                                     <input type="email" class="form-control" id="inputName" placeholder="E-mail" name="T_email"
                                                            value="<?=$user['T_email'];?>" >
                                                 </div>
                                             </div>
-                                            <div class="col-6 py-2">
+                                            <div class="col-4 py-2">
                                                 <div class="">
                                                     <label for="T_gender" class="form-label">เพศ</label>
                                                     <select id="T_gender" class="form-select" name="T_gender">
@@ -304,6 +305,36 @@ $conn = null;
                                                         <option <?php echo ($user['T_gender'] == 'ไม่ระบุ') ? 'selected' : ''; ?>>ไม่ระบุ</option>
                                                     </select>
                                                 </div>
+                                            </div>
+                                            <div class="col-4 py-2">
+                                                <div class="mb-3">
+                                                    <label for="R_ID" class="form-label">ห้องประจำชั้น</label>
+                                                    <select name="R_ID" id="R_ID" class="form-select" required>
+                                                        <?php foreach ($getroom as $room) : ?>
+                                                            <?php
+                                                            // เช็คว่า T_ID ของครูนี้เท่ากับ T_ID ที่ต้องการให้เป็นค่าเริ่มต้นหรือไม่
+                                                            $selected = ($getroom['R_ID'] == $room['R_ID']) ? 'selected' : '';
+                                                            ?>
+                                                            <option name="R_ID" value="<?php echo $room['R_ID']; ?>" <?php echo $selected; ?>>
+                                                                <?php echo $room['R_level']; ?>. <?php echo $room['R_room']; ?> ห้อง <?php echo $room['R_level_numder']; ?>
+                                                            </option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-4 py-2">
+                                                <label for="R_ID" class="form-label">เลือกระดับชั้น</label>
+                                                <select name="R_ID" id="R_ID" class="form-select" required >
+                                                    <option value="">-- เลือกครู --</option>
+
+                                                    <?php foreach ($getroom as $room) : ?>
+                                                        <?php
+                                                        // เช็คว่า T_ID ของครูนี้เท่ากับ T_ID ที่ต้องการให้เป็นค่าเริ่มต้นหรือไม่
+                                                        $selected = ($user['T_ID'] == $room['R_ID']) ? 'selected' : '';
+                                                        ?>
+                                                        <option value="<?php echo $room['R_ID']; ?>"><?php echo $room['R_level']; ?>. <?php echo $room['R_room']; ?> ห้อง <?php echo $room['R_level_numder']; ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
                                             </div>
                                             <div class="col-12 py-2">
                                                 <div class="">
@@ -321,11 +352,22 @@ $conn = null;
                                                            value="<?=$user['T_username'];?>" >
                                                 </div>
                                             </div>
-                                            <div class="col-12 py-2">
-                                                <div class="">
-                                                    <label for="inputNumber" class="form-label">Password</label>
-                                                    <input type="text" class="form-control" id="inputNumber" placeholder="Password" name="T_password"
-                                                           value="<?=$user['T_password'];?>" >
+<!--                                            <div class="col-12 py-2">-->
+<!--                                                <div class="">-->
+<!--                                                    <label for="inputNumber" class="form-label">Password</label>-->
+<!--                                                    <input type="text" class="form-control" id="inputNumber" placeholder="Password" name="T_password"-->
+<!--                                                           value="--><?php //=$user['T_password'];?><!--" >-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+                                            <div class="mb-3">
+                                                <label for="exampleInputPassword1" class="form-label">Password</label>
+                                                <div class="input-group">
+                                                    <input type="password" class="form-control" id="password" name="T_password" placeholder="password" value="<?=$user['T_password'];?>">
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-outline-secondary password-toggle-button" onclick="togglePasswordVisibility()">
+                                                            <i id="eye-icon" class="bi bi-eye"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <input type="hidden" class="form-control date-own" id="T_status" name="T_status"
@@ -440,7 +482,37 @@ $conn = null;
                 });
             }
 
+
+
+
+            // กำหนดฟังก์ชันชื่อ togglePasswordVisibility
+            function togglePasswordVisibility() {
+                // ดึงอิลิเมนต์ DOM ที่มี id "password" และเก็บไว้ในตัวแปร passwordField
+                var passwordField = document.getElementById("password");
+
+                // ดึงอิลิเมนต์ DOM ที่มี id "eye-icon" และเก็บไว้ในตัวแปร eyeIcon
+                var eyeIcon = document.getElementById("eye-icon");
+
+                // ตรวจสอบว่าแอตทริบิวต์ type ของฟิลด์รหัสผ่านในปัจจุบันตั้งค่าเป็น "password" หรือไม่
+                if (passwordField.type === "password") {
+                    // ถ้าใช่, เปลี่ยนแอตทริบิวต์ type เป็น "text" (เปิดเผยรหัสผ่าน)
+                    passwordField.type = "text";
+
+                    // ลบคลาส "bi-eye" ออกจากไอคอนตา และเพิ่มคลาส "bi-eye-slash"
+                    eyeIcon.classList.remove("bi-eye");
+                    eyeIcon.classList.add("bi-eye-slash");
+                } else {
+                    // ถ้าแอตทริบิวต์ไม่ได้เป็น "password" (เป็นไปได้ว่าเป็น "text"), เปลี่ยนกลับเป็น "password"
+                    passwordField.type = "password";
+
+                    // ลบคลาส "bi-eye-slash" ออกจากไอคอนตา และเพิ่มคลาส "bi-eye"
+                    eyeIcon.classList.remove("bi-eye-slash");
+                    eyeIcon.classList.add("bi-eye");
+                }
+            }
+
         </script>
+
     </body>
     </html>
 <?php

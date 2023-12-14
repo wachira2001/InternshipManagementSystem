@@ -1,6 +1,6 @@
 <?php
-require_once '../../services_teacher/conndb.php';
-require_once '../../../config/show_data.php';
+include_once '../../services_teacher/conndb.php';
+include_once '../../../config/show_data.php';
 // ตรวจสอบ session
 session_start();
 echo '
@@ -48,7 +48,7 @@ $conn = null;
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
     <title>ข้อมูลแผนก</title>
-    <link rel="icon" type="image/png" href="../../../upload_img/1.jpg">
+    <link rel="icon" type="image/png" href="../../../upload_img/<?php echo $major['M_img'];?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -119,17 +119,17 @@ $conn = null;
                         <div class="sidebar-submenu">
                             <ul>
                                 <?php
+                                // เงื่อนไขเพื่อตรวจสอบบทบาท
                                 if ($user['T_status'] == '1' ) {
                                     ?>
-
+                                    <li>
+                                        <a href="showdata_teacher.php" >ข้อมูลบุคลากร</a>
+                                    </li>
+                                    <li>
+                                        <a href="showdata_student.php" >ข้อมูลนักศึกษา</a>
+                                    </li>
                                     <li>
                                         <a href="showdata_major.php" class="current-page">ข้อมูลแผนก</a>
-                                    </li>
-                                    <li>
-                                        <a href="showdata_teacher.php">ข้อมูลบุคลากร</a>
-                                    </li>
-                                    <li>
-                                        <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
                                     </li>
                                     <li>
                                         <a href="showdata_room.php">ข้อมูลห้องเรียน</a>
@@ -137,18 +137,25 @@ $conn = null;
                                     <li>
                                         <a href="showdata_company.php" >ข้อมูลสถานประกอบการ</a>
                                     </li>
-
+                                    <li>
+                                        <a href="showdata_request.php" >อนุมัติคำร้อง</a>
+                                    </li>
                                     <?php
                                 }else{
 
                                     ?>
                                     <li>
-                                        <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
+                                        <a href="../crud/showdata_student.php" >ข้อมูลนักศึกษา</a>
+                                    </li>
+                                    <li>
+                                        <a href="../crud/showdata_room.php">ข้อมูลห้องเรียน</a>
+                                    </li>
+                                    <li>
+                                        <a href="../crud/showdata_request.php">อนุมัติคำร้อง</a>
                                     </li>
                                     <?php
                                 }
                                 ?>
-
                             </ul>
                         </div>
                     </li>
@@ -226,14 +233,9 @@ $conn = null;
                             </center>
 
                         </div>
-                        <div>
-                            <!--                        <div class="mb-3">-->
-                            <!--                            <label for="formFile" class="form-label">อัพโหลดรูป</label>-->
-                            <!--                            <input class="form-control" type="file" id="imageInput" accept="image/*" name="M_img">-->
-                            <!--                        </div>-->
-                        </div>
+
                     </div>
-                    <div class="col-12">
+                    <div class="col-12 py-5">
                         <div class="row">
                             <div class="col-sm-12 col-12">
 
@@ -317,40 +319,17 @@ $conn = null;
     <script src="../../../assets/js/modernizr.js"></script>
     <script src="../../../assets/js/moment.js"></script>
 
-    <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->
-    <script src="../../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
-    <script src="../../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-    <script src="../../../assets/vendor/apex/apexcharts.min.js"></script>
-    <script src="../../../assets/vendor/apex/custom/sales/salesGraph.js"></script>
-    <script src="../../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>
-    <script src="../../../assets/vendor/apex/custom/sales/taskGraph.js"></script>
+<!--    <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->
+<!--    <script src="../../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>-->
+<!--    <script src="../../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>-->
+<!--    <script src="../../../assets/vendor/apex/apexcharts.min.js"></script>-->
+<!--    <script src="../../../assets/vendor/apex/custom/sales/salesGraph.js"></script>-->
+<!--    <script src="../../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>-->
+<!--    <script src="../../../assets/vendor/apex/custom/sales/taskGraph.js"></script>-->
 
     <!-- ไฟล์ JavaScript หลัก -->
     <script src="../../../assets/js/main.js"></script>
     <script>
-        document.getElementById('imageInput').addEventListener('change', function (e) {
-            var preview = document.getElementById('previewImage');
-            var file = e.target.files[0];
-            var reader = new FileReader();
-
-            reader.onloadend = function () {
-                preview.src = reader.result;
-            };
-
-            if (file) {
-                reader.readAsDataURL(file);
-            } else {
-                preview.src = "#";
-            }
-        });
-
-        // เมื่อกดปุ่ม "บันทึก" หรือ "อัพโหลดใหม่"
-        function saveImage() {
-            // ส่งข้อมูลรูปภาพไปยังเซิร์ฟเวอร์
-            // ทำการอัพเดทในฐานข้อมูล
-            // หลังจากอัพเดทสำเร็จ, ทำการแทนที่รูปภาพเก่าด้วยรูปภาพใหม่
-            document.getElementById('currentImage').src = document.getElementById('previewImage').src;
-        }
         function showConfirmation() {
             // แสดง SweetAlert หรือโค้ดที่ใช้ในการยืนยันก่อนที่จะยกเลิก
             Swal.fire({

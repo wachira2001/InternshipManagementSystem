@@ -1,5 +1,6 @@
 <?php
 require_once 'conndb.php';
+
 try {
     if (isset($_GET['company_ID'])) {
         $company_ID = $_GET['company_ID'];

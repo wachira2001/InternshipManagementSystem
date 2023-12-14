@@ -2,6 +2,7 @@
 session_start();
 require_once('conndb.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
     $username = $_POST['username'];
     $password = $_POST['password'];
 
@@ -46,25 +47,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['role'] = $role;
         $_SESSION['data'] = $data;
         if ($role == 'student') {
-            header("Location: student/index.php");
+//            header("Location: student/index.php");
+            echo 'student';
         } elseif ($role == 'H' || $role == 'T') {
-            header("Location: teacher/index.php");
+//            header("Location: teacher/index.php");
+            echo 'teacher';
         }
     } else {
 
-        echo '
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-            <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert-dev.js"></script>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">';
-        echo "<script>
-                Swal.fire({
-                    title: 'ไม่มีชื่อผู้ใช้',
-                    icon: 'error'
-                }).then(function(){
-                    window.location.href = './login.php';
-                });
-            </script>";
+//        echo '
+//            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+//            <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+//            <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert-dev.js"></script>
+//            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">';
+//        echo "<script>
+//                Swal.fire({
+//                    title: 'ไม่มีชื่อผู้ใช้',
+//                    icon: 'error'
+//                }).then(function(){
+//                    window.location.href = './login.php';
+//                });
+//            </script>";
+        echo 'error';
     }
 }
 ?>

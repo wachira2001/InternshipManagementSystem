@@ -48,7 +48,7 @@ $conn = null;
         <meta property="og:type" content="Website">
         <meta property="og:site_name" content="Bootstrap Gallery">
         <title>ลงทะเบียนสถานประกอบการ</title>
-        <link rel="icon" type="image/png" href="../../upload_img/1.jpg">
+        <link rel="icon" type="image/png" href="../../upload_img/<?php echo $major['M_img'];?>">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -126,13 +126,13 @@ $conn = null;
                             <?php
                         } else {
                             ?>
-                            <li class="">
+                            <li class="active-page-link">
                                 <a href="addFrom_company.php">
                                     <i class="bi bi-file-earmark-plus"></i>
                                     <span class="menu-text">ลงทะเบียนสถานประกอบการ</span>
                                 </a>
                             </li>
-                            <li class="active-page-link">
+                            <li class="">
                                 <a href="addFrom_request.php">
                                     <i class="bi bi-send-plus"></i>
                                     <span class="menu-text">ยื่นคำร้องออกฝึกประสบการณ์วิชาชีพ</span>

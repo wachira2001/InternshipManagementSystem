@@ -1,7 +1,8 @@
 <?php
 include_once '../config/conndb.php';
 include_once '../config/show_data.php';
-$getTeacher = getTeacher($conn)
+$getTeacher = getTeacher($conn);
+$getroom = getroomall($conn);
 ?>
 
 <!doctype html>
@@ -66,7 +67,7 @@ $getTeacher = getTeacher($conn)
                         <li class="nav-item" ><a class="nav-link " href="../../index.php">หน้าแรก</a></li>
                         <li class="nav-item"><a class="nav-link" href="about.php">เกี่ยวกับเรา</a></li>
                         <li class="nav-item"><a class="nav-link " href="../register.php">สมัครสมาชิก</a></li>
-                        <li class="nav-item"><a class="nav-link" href="login.php">เข้าสู่ระบบ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../login.php">เข้าสู่ระบบ</a></li>
 
                     </ul>
                 </div>
@@ -168,17 +169,17 @@ $getTeacher = getTeacher($conn)
                             <option value="สาขาเทคโนโลยีธุรกิจดิจิทัล">สาขาเทคโนโลยีธุรกิจดิจิทัล</option>
                         </select>
                     </div>
-                    <div class="col-md-6">
-                        <label for="S_level" class="form-label">ระดับชั้น</label>
-                        <select id="S_level" class="form-select" name="S_level" required>
-                            <option selected>เลือกระดับชั้น</option>
-                            <option>ปวช.1</option>
-                            <option>ปวช.2</option>
-                            <option>ปวช.3</option>
-                            <option>ปวส.1</option>
-                            <option>ปวส.2</option>
-                        </select>
-                    </div>
+<!--                    <div class="col-md-6">-->
+<!--                        <label for="S_level" class="form-label">ระดับชั้น</label>-->
+<!--                        <select id="S_level" class="form-select" name="S_level" required>-->
+<!--                            <option selected>เลือกระดับชั้น</option>-->
+<!--                            <option>ปวช.1</option>-->
+<!--                            <option>ปวช.2</option>-->
+<!--                            <option>ปวช.3</option>-->
+<!--                            <option>ปวส.1</option>-->
+<!--                            <option>ปวส.2</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
                     <div class="col-md-6">
                         <label for="T_ID" class="form-label">เลือกครูที่ปรึกษา</label>
                         <select name="T_ID" id="T_ID" class="form-select" required>
@@ -188,6 +189,18 @@ $getTeacher = getTeacher($conn)
                             <?php endforeach; ?>
                         </select>
                     </div>
+                    <div class="col-md-6">
+                        <label for="R_ID" class="form-label">เลือกระดับชั้น</label>
+                        <select name="R_ID" id="R_ID" class="form-select" required>
+                            <option value="">-- เลือกครู --</option>
+                            <?php foreach ($getroom as $room) : ?>
+                                <option value="<?php echo $room['R_ID']; ?>"><?php echo $room['R_level']; ?>. <?php echo $room['R_room']; ?> ห้อง <?php echo $room['R_level_numder']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+
+
                     <div class="col-md-6">
                         <label for="S_level" class="form-label">อัพโหลดไฟล์รูป</label>
                         <input type="file" id="S_img" class="form-control" aria-label="Upload" name="S_img" accept="image/jpeg, image/png, image/jpg" required>

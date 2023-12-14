@@ -25,7 +25,7 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'H')) {
 }
 
 $user = getuserT($conn,$_SESSION['username']);
-$userT = getteacherall($conn);
+$getteacherall = getteacherall($conn);
 $stmtD = getmajor($conn);
 
 
@@ -51,7 +51,7 @@ $conn = null;
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
     <title>ข้อมูลบุคลากร</title>
-    <link rel="icon" type="image/png" href="../../../upload_img/1.jpg">
+    <link rel="icon" type="image/png" href="../../../upload_img/<?php echo $stmtD['M_img'];?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -120,15 +120,10 @@ $conn = null;
                         </a>
                         <div class="sidebar-submenu">
                             <ul>
-
-
                                 <?php
+                                // เงื่อนไขเพื่อตรวจสอบบทบาท
                                 if ($user['T_status'] == '1' ) {
                                     ?>
-
-                                    <li>
-                                        <a href="showdata_major.php">ข้อมูลแผนก</a>
-                                    </li>
                                     <li>
                                         <a href="showdata_teacher.php" class="current-page">ข้อมูลบุคลากร</a>
                                     </li>
@@ -136,18 +131,29 @@ $conn = null;
                                         <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
                                     </li>
                                     <li>
+                                        <a href="showdata_major.php">ข้อมูลแผนก</a>
+                                    </li>
+                                    <li>
                                         <a href="showdata_room.php">ข้อมูลห้องเรียน</a>
                                     </li>
                                     <li>
                                         <a href="showdata_company.php" >ข้อมูลสถานประกอบการ</a>
                                     </li>
-
+                                    <li>
+                                        <a href="showdata_request.php" >อนุมัติคำร้อง</a>
+                                    </li>
                                     <?php
                                 }else{
 
                                     ?>
                                     <li>
-                                        <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
+                                        <a href="../crud/showdata_student.php" >ข้อมูลนักศึกษา</a>
+                                    </li>
+                                    <li>
+                                        <a href="../crud/showdata_room.php">ข้อมูลห้องเรียน</a>
+                                    </li>
+                                    <li>
+                                        <a href="../crud/showdata_request.php">อนุมัติคำร้อง</a>
                                     </li>
                                     <?php
                                 }
@@ -172,7 +178,7 @@ $conn = null;
             <ol class="breadcrumb d-md-flex d-none" >
                 <li class="breadcrumb-item">
                     <i class="bi bi-folder2"></i>
-                    <a href="../../index.php">ข้อมูลทั่วไป</a>
+                    <a href="showdata_teacher.php">ข้อมูลทั่วไป</a>
                 </li>
                 <li class="breadcrumb-item breadcrumb-active" aria-current="page">ข้อมูลบุคลากร</li>
             </ol>
@@ -198,7 +204,7 @@ $conn = null;
                                 <!-- คำสั่งการดำเนินการในโปรไฟล์ -->
                                 <div class="header-profile-actions">
                                     <a href="../../crud/editFrom_profile.php">โปรไฟล์</a>
-                                    <a href="../../database/logout.php">ออกจากระบบ</a>
+                                    <a href="#" onclick="showConfirmationLogout()">ออกจากระบบ</a>
                                 </div>
                                 <!-- ส่วนจบของคำสั่งการดำเนินการในโปรไฟล์ -->
                             </div>
@@ -239,7 +245,7 @@ $conn = null;
                             </tr>
                             </thead>
                             <tbody>
-                            <?php foreach ($userT as $teacher) { ?>
+                            <?php foreach ($getteacherall as $teacher) { ?>
                                 <tr>
                                     <th><?=$teacher['T_ID'];?></th>
                                     <td><?=$teacher['T_fname'];?></td>
@@ -288,14 +294,34 @@ $conn = null;
     <script src="../../../assets/js/moment.js"></script>
 
     <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->
-    <script src="../../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
-    <script src="../../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-    <script src="../../../assets/vendor/apex/apexcharts.min.js"></script>
-    <script src="../../../assets/vendor/apex/custom/sales/salesGraph.js"></script>
-    <script src="../../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>
-    <script src="../../../assets/vendor/apex/custom/sales/taskGraph.js"></script>
+<!--    <script src="../../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>-->
+<!--    <script src="../../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>-->
+<!--    <script src="../../../assets/vendor/apex/apexcharts.min.js"></script>-->
+<!--    <script src="../../../assets/vendor/apex/custom/sales/salesGraph.js"></script>-->
+<!--    <script src="../../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>-->
+<!--    <script src="../../../assets/vendor/apex/custom/sales/taskGraph.js"></script>-->
 
     <!-- ไฟล์ JavaScript หลัก -->
     <script src="../../../assets/js/main.js"></script>
+    <script>
+        function showConfirmationLogout() {
+            // แสดง SweetAlert หรือโค้ดที่ใช้ในการยืนยันก่อนที่จะยกเลิก
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม ?',
+                text: 'ออกจากระบบ',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ออกจากระบบ',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // กระทำเมื่อยืนยัน
+                    window.location.href = '../../../config/logout.php';
+                }
+            });
+        }
+    </script>
 </body>
 </html>

@@ -1,13 +1,14 @@
 <?php
-require_once 'conndb.php';
-
+include_once 'conndb.php';
 try {
     // ตรวจสอบว่ามีข้อมูลที่จำเป็นหรือไม่
     if (
         isset(
+            $_POST['T_ID'],
             $_POST['T_fname'],
             $_POST['T_lname'],
             $_POST['T_position'],
+            $_POST['T_birthday'],
             $_POST['T_status'],
             $_POST['T_phone'],
             $_POST['T_email'],
@@ -20,6 +21,7 @@ try {
         $T_fname =  $_POST['T_fname'];
         $T_lname = $_POST['T_lname'];
         $T_position = $_POST['T_position'];
+        $T_birthday = $_POST['T_birthday'];
         $T_address = $_POST['T_address'];
         $T_status = $_POST['T_status'];
         $T_phone = $_POST['T_phone'];
@@ -33,6 +35,7 @@ try {
                               T_fname = :T_fname,
                               T_lname = :T_lname,
                               T_position = :T_position,
+                              T_birthday = :T_birthday,
                               T_address = :T_address,
                               T_status = :T_status,
                               T_phone = :T_phone,
@@ -44,6 +47,7 @@ try {
         $updateStmt->bindParam(':T_fname', $T_fname, PDO::PARAM_STR);
         $updateStmt->bindParam(':T_lname', $T_lname, PDO::PARAM_STR);
         $updateStmt->bindParam(':T_position', $T_position, PDO::PARAM_STR);
+        $updateStmt->bindParam(':T_birthday', $T_birthday, PDO::PARAM_STR);
         $updateStmt->bindParam(':T_address', $T_address, PDO::PARAM_STR);
         $updateStmt->bindParam(':T_status', $T_status, PDO::PARAM_STR);
         $updateStmt->bindParam(':T_phone', $T_phone, PDO::PARAM_STR);

@@ -23,7 +23,7 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'student')) {
     </script>';
     exit();
 }
-$user = getuserS($conn,$_SESSION['username']);
+$user = getuserS($conn, $_SESSION['username']);
 $major = getmajor($conn);
 
 if (isset($_GET['search']) && $_GET['search'] != '') {
@@ -49,8 +49,8 @@ $conn = null;
 ?>
 
 
-<!doctype html>
-<html lang="en">
+    <!doctype html>
+    <html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -63,25 +63,29 @@ $conn = null;
         <meta property="og:type" content="Website">
         <meta property="og:site_name" content="Bootstrap Gallery">
         <title>ยื่นคำร้องออกฝึกประสบการณ์วิชาชีพ</title>
-        <link rel="icon" type="image/png" href="../../upload_img/1.jpg">
+        <link rel="icon" type="image/png" href="../../upload_img/<?php echo $major['M_img']; ?>">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
         <style>
-            #fonts{
+            #fonts {
                 font-family: 'Mitr', sans-serif;
             }
-            #fonts_b{
+
+            #fonts_b {
                 font-family: 'Mitr', sans-serif;
                 font-weight: bolder;
             }
         </style>
 
         <link rel="stylesheet" href="../../assets/css/animate.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.3.4/sweetalert2.min.css">
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.3.4/sweetalert2.min.css">
         <link rel="stylesheet" href="../../assets/fonts/bootstrap/bootstrap-icons.css">
         <link rel="stylesheet" href="../../assets/css/main.min.css">
         <link rel="stylesheet" href="../../assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
+        <link rel="stylesheet" href="../../assets/vendor/daterange/daterange.css">
+
     </head>
 
     <body id="fonts">
@@ -108,7 +112,8 @@ $conn = null;
             <div class="sidebar-brand">
                 <a href="../index.php" class="logo">
                 <span class="avatar">
-                    <img src="../../upload_img/<?php echo $major['M_img'];?>" alt="Admin Dashboards" style="width: auto;height: 100px"/>
+                    <img src="../../upload_img/<?php echo $major['M_img']; ?>" alt="Admin Dashboards"
+                         style="width: auto;height: 100px"/>
                 </span>
                 </a>
             </div>
@@ -153,6 +158,12 @@ $conn = null;
                                     <span class="menu-text">ยื่นคำร้องออกฝึกประสบการณ์วิชาชีพ</span>
                                 </a>
                             </li>
+                            <li class="active-page-link">
+                                <a href="show_status.php">
+                                    <i class="bi bi-send-plus"></i>
+                                    <span class="menu-text">เช็คสถานะ</span>
+                                </a>
+                            </li>
 
                             <?php
                         }
@@ -170,7 +181,7 @@ $conn = null;
             <div class="page-header">
                 <div class="toggle-sidebar" id="toggle-sidebar"><i class="bi bi-list"></i></div>
                 <!-- ส่วนเริ่มต้นของการหลีกเลี่ยงข้อผิดพลาด -->
-                <ol class="breadcrumb d-md-flex d-none" >
+                <ol class="breadcrumb d-md-flex d-none">
                     <li class="breadcrumb-item">
                         <i class="bi bi-send-plus"></i>
                         <a href="#">ยื่นคำร้องออกฝึกประสบการณ์วิชาชีพ</a>
@@ -183,7 +194,8 @@ $conn = null;
                             <!-- เริ่มต้นของดรอปดาวน์ -->
                             <li class="dropdown">
                                 <!-- ลิงค์การตั้งค่าผู้ใช้ -->
-                                <a href="#" id="userSettings" class="user-settings" data-toggle="dropdown" aria-haspopup="true">
+                                <a href="#" id="userSettings" class="user-settings" data-toggle="dropdown"
+                                   aria-haspopup="true">
                                     <!-- ชื่อผู้ใช้ -->
                                     <span class="user-name d-none d-md-block"><?php echo $user['S_fname']; ?></span>
                                     <!-- รูปประจำตัว -->
@@ -223,7 +235,10 @@ $conn = null;
                         <form action="addFrom_request.php" method="get">
                             <!-- Search input group start -->
                             <div class="input-group">
-                                <input type="text" class="form-control" name="search" placeholder="ค้นหาชื่อสถานประกอบ" value="<?php if (isset($_GET['search'])) { echo $_GET['search']; } ?>">
+                                <input type="text" class="form-control" name="search" placeholder="ค้นหาชื่อสถานประกอบ"
+                                       value="<?php if (isset($_GET['search'])) {
+                                           echo $_GET['search'];
+                                       } ?>">
                                 <button class="btn" type="submit">
                                     <i class="bi bi-search"></i>
                                 </button>
@@ -232,214 +247,256 @@ $conn = null;
                         <?php
                         // แสดงข้อความที่ค้นหา
                         if (isset($_GET['search']) && $_GET['search'] != '') {
-                            echo '<font color="red"> ข้อมูลการค้นหา : ' . $_GET['search'];
-                            echo ' *พบ ' . count($company) . ' รายการ</font><br><br>';
+                            if (count($company) > 0) {
+                                echo '<font color="red"> ข้อมูลการค้นหา : ' . $_GET['search'];
+                                echo ' *พบ ' . count($company) . ' รายการ</font><br><br>';
+                                echo count($company);
+                            } else {
+                                echo '<center>
+                            <h1>ไม่พบสถานประกอบการ ' . $_GET['search'] . '</h1>
+                            <a href="addFrom_company.php">
+                            <button  type="button" class="btn btn-info"><i class="bi bi-plus-square"></i> ลงทะเบียนสถานประกอบการ</button>
+                          </a></center>';
+                            }
                         }
                         ?>
+
                         <!-- Search input group end -->
                     </div>
 
 
                     <!-- Row start -->
-                    <div class="row py-3" >
-                        <div>
-                            <?php foreach ($company as $company) : ?>
+                    <div class="row py-2">
+                        <?php foreach ($company as $company) : ?>
+                            <div class="col-4">
                                 <div class="row justify-content-center">
                                     <div class="card w-75">
-                                        <img src="../../upload_img/<?php echo $company['C_img'];?>" class="card-img-top" alt="Best Admin Dashboards" id="imgs">
+                                        <img src="../../upload_img/<?php echo $company['C_img']; ?>" class="card-img-top" alt="Company Image" id="imgs">
                                         <div class="card-body">
-                                            <div class="card-title"><?php echo $company['C_name'];?></div>
-                                            <p class="mb-2">ที่อยู่ : ตำบล<?php echo $company['C_tambon'];?>
-                                                อำเภอ<?php echo $company['C_amphoe'];?>
-                                                จังหวัด<?php echo $company['C_province'];?>
-                                            </p>
-                                            <button type="button" class="btn btn-info" data-bs-toggle="modal"
-                                                    data-bs-target="#staticBackdrop<?php echo $company['company_ID'];?>" >
-                                                ยืนคำร้องขอออกฝึก
+                                            <div class="card-title"><?php echo $company['C_name']; ?></div>
+                                            <p class="mb-2">ที่อยู่ : ตำบล<?php echo $company['C_tambon']; ?> อำเภอ<?php echo $company['C_amphoe']; ?> จังหวัด<?php echo $company['C_province']; ?></p>
+                                            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop<?php echo $company['company_ID']; ?>">
+                                                ยื่นคำร้องขอออกฝึก
                                             </button>
-
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- ส่วน modal -->
-                                <div class="modals-placeholder">
-                                    <div class="modal fade" id="staticBackdrop<?php echo $company['company_ID'];?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="2"
-                                         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-xl">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="staticBackdropLabel">ยื่นคำร้องออกฝึกประสบการวิชาชีพ</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <div class="modal fade" id="staticBackdrop<?php echo $company['company_ID']; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="2" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="staticBackdropLabel">ยื่นคำร้องออกฝึกประสบการวิชาชีพ</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="row container">
+                                                <div class="col-12">
+                                                    <div class="form-section-title">
+                                                        รายละเอียดเกี่ยวกับสถานประกอบการ
+                                                    </div>
                                                 </div>
+                                                <div class="col-12">
+                                                    <label class="form-label">ชื่อสถานประกอบการ</label>
+                                                    <input type="text" class="form-control"
+                                                           placeholder="Enter text"
+                                                           value="<?php echo $company['C_name']; ?>" readonly>
+                                                </div>
+                                                <div class="col-4 py-3">
+                                                    <label class="form-label">ตำบล</label>
+                                                    <input type="text" class="form-control"
+                                                           placeholder="Enter text"
+                                                           value="<?php echo $company['C_tambon']; ?>" readonly>
+                                                </div>
+                                                <div class="col-4 py-3">
+                                                    <label class="form-label">อำเภอ</label>
+                                                    <input type="text" class="form-control"
+                                                           placeholder="Enter text"
+                                                           value="<?php echo $company['C_amphoe']; ?>" readonly>
+                                                </div>
+                                                <div class="col-4 py-3">
+                                                    <label class="form-label">จังหวัด</label>
+                                                    <input type="text" class="form-control"
+                                                           placeholder="Enter text"
+                                                           value="<?php echo $company['C_province']; ?>"
+                                                           readonly>
+                                                </div>
+                                                <div class="col-6 py-1">
+                                                    <label class="form-label">ผู้สอนงาน</label>
+                                                    <input type="text" class="form-control"
+                                                           placeholder="Enter text"
+                                                           value="<?php echo $company['C_staff_name']; ?>"
+                                                           readonly>
+                                                </div>
+                                                <div class="col-6 py-1">
+                                                    <label class="form-label">เบอร์โทรศัพท์</label>
+                                                    <input type="text" class="form-control"
+                                                           placeholder="Enter text"
+                                                           value="<?php echo $company['C_staff_phone']; ?>"
+                                                           readonly>
+                                                </div>
+                                            </div>
 
-                                                <form method="post" id="forms">
-                                                    <div class="modal-body">
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <div class="form-section-title">รายละเอียดเกี่ยวกับสถานประกอบการ</div>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <label class="form-label">ชื่อสถานประกอบการ</label>
-                                                                <input type="text" class="form-control" placeholder="Enter text"
-                                                                       value="<?php echo $company['C_name'];?>" readonly>
-                                                            </div>
-                                                            <div class="col-4 py-3">
-                                                                <label class="form-label">ตำบล</label>
-                                                                <input type="text" class="form-control" placeholder="Enter text"
-                                                                       value="<?php echo $company['C_tambon'];?>" readonly>
-                                                            </div>
-                                                            <div class="col-4 py-3">
-                                                                <label class="form-label">อำเภอ</label>
-                                                                <input type="text" class="form-control" placeholder="Enter text"
-                                                                       value="<?php echo $company['C_amphoe'];?>" readonly>
-                                                            </div>
-                                                            <div class="col-4 py-3">
-                                                                <label class="form-label">จังหวัด</label>
-                                                                <input type="text" class="form-control" placeholder="Enter text"
-                                                                       value="<?php echo $company['C_province'];?>" readonly>
-                                                            </div>
-                                                            <div class="col-6 py-1">
-                                                                <label class="form-label">ผู้สอนงาน</label>
-                                                                <input type="text" class="form-control" placeholder="Enter text"
-                                                                       value="<?php echo $company['C_staff_name'];?>" readonly>
-                                                            </div>
-                                                            <div class="col-6 py-1">
-                                                                <label class="form-label">เบอร์โทรศัพท์</label>
-                                                                <input type="text" class="form-control" placeholder="Enter text"
-                                                                       value="<?php echo $company['C_staff_phone'];?>" readonly>
-                                                            </div>
-                                                            <div class="col-12 py-3">
-                                                                <div class="form-section-title">ป้อนรายละเอียดยื่นคำร้อง</div>
-                                                            </div>
 
-                                                            <div class="col-3">
-                                                                <label class="form-label">รหัสยื่นคำร้อง</label>
-                                                                <input type="text" class="form-control" placeholder="Enter text"
-                                                                       value="<?php echo $user['S_ID'];?><?php echo $company['company_ID'];?>"
-                                                                       name="request_id" readonly>
-                                                            </div>
-                                                            <div class="col-3">
-                                                                <label class="form-label">ผู้ที่หาสถานประกอบการ</label>
-                                                                <select class="form-select" aria-label="Default select example" name="RE_how">
-                                                                    <option selected>กรุณาเลือก</option>
-                                                                    <option value="ตัวเอง">ตัวเอง</option>
-                                                                    <option value="คนรู้จัก">คนรู้จัก</option>
-                                                                    <option value="ญาติ/ผู้ปกครอง">ญาติ/ผู้ปกครอง</option>
-                                                                    <option value="อาจารย์">อาจารย์</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-12 py-2">
-                                                                <label class="form-label">เหตุผลที่อยากฝึกที่ <?php echo $company['C_name'];?> </label>
-                                                                <textarea type="text" class="form-control" placeholder="Enter text"
-                                                                          name="RE_reason" > </textarea>
 
+                                            <form method="post" id="form-<?php echo $company['company_ID']; ?>" class="modal-body">
+                                                <div class="col-12 py-3">
+                                                    <div class="form-section-title">ป้อนรายละเอียดยื่นคำร้อง
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <form method="post" id="forms" class="row d-flex justify-content-evenly">
+                                                        <div class="col-3">
+                                                            <label class="form-label">รหัสยื่นคำร้อง</label>
+                                                            <input type="text" class="form-control"
+                                                                   placeholder="Enter text"
+                                                                   value="<?php echo $user['S_ID']; ?><?php echo $company['company_ID']; ?>"
+                                                                   name="request_id" readonly>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <label class="form-label">ผู้ที่หาสถานประกอบการ</label>
+                                                            <input name="RE_how" type="text" class="form-control"
+                                                                   placeholder="คุณรู้สักสถานประกอบการนี้ได้อย่างไร"
+                                                                   required>
+                                                        </div>
+                                                        <div class="col-4 ">
+                                                            <div class="m-0">
+                                                                <div class="form-label">วัน/เดือน/ปี ที่ออกฝึก -
+                                                                    วันจบการฝึก
+                                                                </div>
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text">
+                                                                        <i class="bi bi-calendar4"></i>
+                                                                    </span>
+                                                                    <input type="text"
+                                                                           class="form-control datepicker-range-auto-apply"
+                                                                           name="RE_period"
+                                                                           placeholder="กรุณาป้อนวันที่ออกฝึกและสินสุดการฝึก"
+                                                                           required>
+                                                                </div>
                                                             </div>
-                                                            <div class="col-12 py-2">
-                                                                <label class="form-label">ตำแหน่งที่ฝึกใน <?php echo $company['C_name'];?> </label>
-                                                                <input type="text" class="form-control" placeholder="ป้อนตำแหน่งที่เข้ารับการฝึกประสบกาณ์วิชาชีพ"
-                                                                          name="RE_position" >
-
-                                                            </div>
-
-                                                            <input name="RE_teacher_opinion" type="hidden" value="1">
-                                                            <input name="RE_teacherH_opinion" type="hidden" value="1">
-                                                            <input name="RE_commentH" type="hidden" value="">
-                                                            <input name="RE_comment" type="hidden" value="">
-                                                            <input name="RE_status" type="hidden" value="1">
-                                                            <input name="S_ID" type="hidden" value="<?php echo $user['S_ID'];?>">
-                                                            <input name="company_ID" type="hidden" value="<?php echo $company['company_ID'];?>">
+                                                        </div>
+                                                        <div class="col-12 py-2">
+                                                            <label class="form-label">เหตุผลที่อยากฝึกที่ <?php echo $company['C_name']; ?> </label>
+                                                            <textarea type="text" class="form-control"
+                                                                      placeholder="กรุณาป้อนเหตุผลที่อยากฝึกที่สะถานประกอบการนี้"
+                                                                      name="RE_reason" required></textarea>
 
                                                         </div>
+                                                        <div class="col-12 py-2">
+                                                            <label class="form-label">ตำแหน่งที่ฝึกใน <?php echo $company['C_name']; ?> </label>
+                                                            <input type="text" class="form-control"
+                                                                   placeholder="ป้อนตำแหน่งที่เข้ารับการฝึกประสบกาณ์วิชาชีพ"
+                                                                   name="RE_position" required>
+                                                        </div>
+                                                        <input name="S_ID" type="hidden" value="<?php echo $user['S_ID']; ?>">
+                                                        <input name="company_ID" type="hidden" value="<?php echo $company['company_ID']; ?>">
+                                                        <input name="RE_status" type="hidden" value="1">
+                                                    </form>
 
-                                                    </div>
-                                                </form>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal" onclick="showConfirmation()">ยกเลิก</button>
-                                                    <button type="button" class="btn btn-success"
-                                                            onclick="saveData()">ยื่นคำขอ</button>
                                                 </div>
 
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-dark" data-bs-dismiss="modal" onclick="showConfirmation()">ยกเลิก</button>
+                                                <button type="button" class="btn btn-success" onclick="saveData(<?php echo $company['company_ID']; ?>)">ยื่นคำขอ</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-
-                            <?php endforeach; ?>
-                        </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-                    <!-- Row end -->
+
+                    <!-- ส่วนจบของคอนเทนเนอร์ -->
+
 
                 </div>
-                <!-- ส่วนจบของคอนเทนเนอร์ -->
-
                 <!-- เริ่มต้นของ App Footer -->
                 <div class="app-footer">
                     <span>สาขาเทคโนโลยีธุรกิจดิจิทัล</span>
                 </div>
                 <!-- ส่วนจบของ App Footer -->
+
             </div>
 
-        </div>
+            <!-- ส่วนจบของคอนเทนเนอร์ -->
 
-        <!-- ส่วนจบของคอนเทนเนอร์ -->
+            <!-- ส่วนจบของหน้า -->
 
-        <!-- ส่วนจบของหน้า -->
+            <!-- เริ่มต้นของไฟล์ JavaScript ที่จำเป็น -->
+            <script src="../../assets/js/jquery.min.js"></script>
+            <script src="../../assets/js/bootstrap.bundle.min.js"></script>
+            <script src="../../assets/js/modernizr.js"></script>
+            <script src="../../assets/js/moment.js"></script>
 
-        <!-- เริ่มต้นของไฟล์ JavaScript ที่จำเป็น -->
-        <script src="../../assets/js/jquery.min.js"></script>
-        <script src="../../assets/js/bootstrap.bundle.min.js"></script>
-        <script src="../../assets/js/modernizr.js"></script>
-        <script src="../../assets/js/moment.js"></script>
+            <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->
+            <script src="../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
+            <script src="../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
+            <script src="../../assets/vendor/apex/apexcharts.min.js"></script>
+            <script src="../../assets/vendor/apex/custom/sales/salesGraph.js"></script>
+            <script src="../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>
+            <script src="../../assets/vendor/apex/custom/sales/taskGraph.js"></script>
+            <script src="../../assets/vendor/daterange/daterange.js"></script>
+            <script src="../../assets/vendor/daterange/custom-daterange.js"></script>
 
-        <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->
-        <script src="../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
-        <script src="../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-        <script src="../../assets/vendor/apex/apexcharts.min.js"></script>
-        <script src="../../assets/vendor/apex/custom/sales/salesGraph.js"></script>
-        <script src="../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>
-        <script src="../../assets/vendor/apex/custom/sales/taskGraph.js"></script>
+            <!-- ไฟล์ JavaScript หลัก -->
+            <script src="../../assets/js/main.js"></script>
+            <script>
+                function showConfirmation() {
+                    // แสดง SweetAlert หรือโค้ดที่ใช้ในการยืนยันก่อนที่จะยกเลิก
+                    Swal.fire({
+                        title: 'คุณแน่ใจหรือไม่?',
+                        text: 'การกระทำนี้จะยกเลิกขั้นตอนที่คุณทำ',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'ใช่, ยกเลิก!',
+                        cancelButtonText: 'ยกเลิก'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // กระทำเมื่อยืนยัน
+                            window.location.href = '../crud/addFrom_request.php';
+                        }
+                    });
+                }
 
-        <!-- ไฟล์ JavaScript หลัก -->
-        <script src="../../assets/js/main.js"></script>
-        <script>
-            function showConfirmation() {
-                // แสดง SweetAlert หรือโค้ดที่ใช้ในการยืนยันก่อนที่จะยกเลิก
-                Swal.fire({
-                    title: 'คุณแน่ใจหรือไม่?',
-                    text: 'การกระทำนี้จะยกเลิกขั้นตอนที่คุณทำ',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'ใช่, ยกเลิก!',
-                    cancelButtonText: 'ยกเลิก'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // กระทำเมื่อยืนยัน
-                        window.location.href = '../crud/addFrom_request.php';
+                function saveData(companyID) {
+                    // เรียกใช้ฟอร์มโดยใช้ ID ของฟอร์ม
+                    var form = document.getElementById('form-' + companyID);
+
+                    // ตรวจสอบว่าทุก input ในฟอร์มมีค่าหรือไม่
+                    var isValid = Array.from(form.elements).every(function (element) {
+                        return element.value.trim() !== ''; // ตรวจสอบว่าค่าไม่ว่าง
+                    });
+
+                    // ถ้าข้อมูลไม่ครบ
+                    if (!isValid) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'กรุณากรอกข้อมูลให้ครบ',
+                            showConfirmButton: true,
+                        });
+                        return; // ออกจากฟังก์ชันไปเลย
                     }
-                });
-            }
-            function saveData() {
-                Swal.fire({
-                    title: 'คุณแน่ใจหรือไม่?',
-                    text: 'ที่จะแก้ไขข้อมูล',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'ใช่, บันทึก!',
-                    cancelButtonText: 'ยกเลิก'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.querySelector('#forms').submit();
-                    }
-                });
-            }
 
-        </script>
+                    // ถ้าข้อมูลครบทุก field แสดงข้อความยืนยัน
+                    Swal.fire({
+                        title: 'คุณแน่ใจหรือไม่?',
+                        text: 'ที่จะแก้ไขข้อมูล',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ใช่, บันทึก!',
+                        cancelButtonText: 'ยกเลิก'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit(); // ทำการ submit ฟอร์ม
+                        }
+                    });
+                }
+
+
+            </script>
     </body>
     </html>
 <?php

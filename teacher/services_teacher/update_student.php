@@ -1,5 +1,5 @@
 <?php
-require_once 'conndb.php';
+include_once 'conndb.php';
 try {
     // ตรวจสอบว่ามีข้อมูลที่จำเป็นหรือไม่
     if (
@@ -17,7 +17,6 @@ try {
             $_POST['S_gpa'],
             $_POST['S_health'],
             $_POST['S_major'],
-            $_POST['S_level'],
             $_POST['S_ralative_name'],
             $_POST['S_ralative_phone'],
             $_POST['S_ralative_address']
@@ -36,7 +35,7 @@ try {
         $S_gpa = $_POST['S_gpa'];
         $S_health = $_POST['S_health'];
         $S_major = $_POST['S_major'];
-        $S_level = $_POST['S_level'];
+
         $S_ralative_name = $_POST['S_ralative_name'];
         $S_ralative_phone = $_POST['S_ralative_phone'];
         $S_ralative_address = $_POST['S_ralative_address'];
@@ -55,7 +54,7 @@ try {
                           S_gpa = :S_gpa,
                           S_health = :S_health,
                           S_major = :S_major,
-                          S_level = :S_level,           
+                          
                           S_ralative_name = :S_ralative_name,
                           S_ralative_phone = :S_ralative_phone,
                           S_ralative_address = :S_ralative_address
@@ -73,7 +72,6 @@ try {
         $updateStmt->bindParam(':S_gpa', $S_gpa, PDO::PARAM_STR);
         $updateStmt->bindParam(':S_health', $S_health, PDO::PARAM_STR);
         $updateStmt->bindParam(':S_major', $S_major, PDO::PARAM_STR);
-        $updateStmt->bindParam(':S_level', $S_level, PDO::PARAM_STR);
         $updateStmt->bindParam(':S_ralative_name', $S_ralative_name, PDO::PARAM_STR);
         $updateStmt->bindParam(':S_ralative_phone', $S_ralative_phone, PDO::PARAM_STR);
         $updateStmt->bindParam(':S_ralative_address', $S_ralative_address, PDO::PARAM_STR);

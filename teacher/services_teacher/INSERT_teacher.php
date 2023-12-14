@@ -1,6 +1,5 @@
 <?php
 require_once 'conndb.php';
-
 try {
     if (
         isset(
@@ -16,7 +15,8 @@ try {
             $_POST['T_email'],
             $_POST['T_gender'],
             $_POST['T_password'],
-            $_POST['T_username']
+            $_POST['T_username'],
+            $_POST['R_ID']
         )
     ) {
         // ดึงข้อมูลจาก $_POST
@@ -33,51 +33,25 @@ try {
         $T_gender = $_POST['T_gender'];
         $T_password = $_POST['T_password'];
         $T_username = $_POST['T_username'];
+        $R_ID = $_POST['R_ID'];
 
         // ตรวจสอบข้อมูลซ้ำในฐานข้อมูล
-        $stmt = $conn->prepare("SELECT COUNT(*) as count FROM teacher WHERE T_ID = :T_ID");
-        $stmtemail = $conn->prepare("SELECT COUNT(*) as count FROM teacher WHERE T_username = :T_username");
-        $stmt->execute(array(':T_ID' => $T_ID));
-        $stmtemail->execute(array(':T_username' => $T_email));
+        $stmt = $conn->prepare("SELECT COUNT(*) as count FROM teacher WHERE T_ID = :T_ID or T_username = :T_username");
+        $stmt->execute(array(':T_ID' => $T_ID, ':T_username' => $T_username));
 
+        // ถ้ามีข้อมูลที่ซ้ำ
         if ($stmt->fetchColumn() > 0) {
-            // ดึงข้อมูลที่ซ้ำ
-            $duplicateDataStmt = $conn->prepare("SELECT * FROM teacher WHERE T_ID = :T_ID");
-            $duplicateDataStmt->execute(array(':T_ID' => $T_ID));
-            $duplicateData = $duplicateDataStmt->fetch(PDO::FETCH_ASSOC);
-
             // แสดง SweetAlert2 สำหรับข้อมูลที่ซ้ำ
             echo "
             <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
             <script>
                 Swal.fire({
                     title: 'ข้อมูลที่ซ้ำ',
-                    html: 'ข้อมูลนี้มีอยู่แล้ว:<br>ID: {$duplicateData['T_ID']}',
+                    text: 'ข้อมูล T_ID หรือ T_username ซ้ำกับข้อมูลที่มีอยู่แล้ว',
                     icon: 'warning',
                     showConfirmButton: true
                 }).then(function () {
-                    window.location.href = '../index.php';
-                });
-            </script>";
-            return;
-        }
-        if ($stmtemail->fetchColumn() > 0) {
-            // ดึงข้อมูลที่ซ้ำ
-            $duplicateDataStmt = $conn->prepare("SELECT * FROM teacher WHERE T_username = :T_username");
-            $duplicateDataStmt->execute(array(':T_username' => $T_username));
-            $duplicateData = $duplicateDataStmt->fetch(PDO::FETCH_ASSOC);
-
-            // แสดง SweetAlert2 สำหรับข้อมูลที่ซ้ำ
-            echo "
-            <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-            <script>
-                Swal.fire({
-                    title: 'ข้อมูลที่ซ้ำ',
-                    html: 'ข้อมูลนี้มีอยู่แล้ว:<br>ID: {$duplicateData['T_username']}',
-                    icon: 'warning',
-                    showConfirmButton: true
-                }).then(function () {
-                    window.location.href = '../register_teacher.php';
+                    window.location.href = 'register_teacher.php';
                 });
             </script>";
             return;
@@ -94,9 +68,9 @@ try {
 
         // เพิ่มข้อมูลในฐานข้อมูล
         $insertStmt = $conn->prepare("INSERT INTO teacher (
-                    T_ID, T_fname, T_lname, T_position, T_address, T_birthday, T_img, T_status, T_phone, T_email, T_gender, T_password, T_username
+                    T_ID, T_fname, T_lname, T_position, T_address, T_birthday, T_img, T_status, T_phone, T_email, T_gender, T_password, T_username,R_ID
                 ) VALUES (
-                    :T_ID, :T_fname, :T_lname, :T_position, :T_address, :T_birthday, :T_img, :T_status, :T_phone, :T_email, :T_gender, :T_password, :T_username
+                    :T_ID, :T_fname, :T_lname, :T_position, :T_address, :T_birthday, :T_img, :T_status, :T_phone, :T_email, :T_gender, :T_password, :T_username,:R_ID
                 )");
 
         // กำหนดค่าพารามิเตอร์
@@ -113,6 +87,7 @@ try {
         $insertStmt->bindParam(':T_gender', $T_gender, PDO::PARAM_STR);
         $insertStmt->bindParam(':T_password', $T_password, PDO::PARAM_STR);
         $insertStmt->bindParam(':T_username', $T_username, PDO::PARAM_STR);
+        $insertStmt->bindParam(':R_ID', $R_ID, PDO::PARAM_STR);
 
         // ทำการเพิ่มข้อมูล
         if ($insertStmt->execute()) {

@@ -29,8 +29,8 @@ try {
         $C_province = $_POST['C_province']; // เพิ่มบรรทัดนี้
 
         // ตรวจสอบข้อมูลซ้ำในฐานข้อมูล
-        $stmt = $conn->prepare("SELECT COUNT(*) as count FROM company WHERE company_ID = :company_ID");
-        $stmt->execute(array(':company_ID' => $company_ID));
+        $stmt = $conn->prepare("SELECT COUNT(*) as count FROM company WHERE company_ID = :company_ID or C_name = :C_name");
+        $stmt->execute(array(':company_ID' => $company_ID, ':C_name' => $C_name));
 
         if ($stmt->fetchColumn() > 0) {
             // แสดง SweetAlert2 สำหรับข้อมูลที่ซ้ำ
@@ -39,11 +39,11 @@ try {
             <script>
                 Swal.fire({
                     title: 'ข้อมูลที่ซ้ำ',
-                    html: 'ข้อมูลบริษัทนี้มีอยู่แล้ว:<br>ID: {$company_ID}',
+                    html: 'ข้อมูลบริษัทนี้มีอยู่แล้ว <br>สถานประกอบการ: {$C_name}',
                     icon: 'warning',
                     showConfirmButton: true
                 }).then(function () {
-                    window.location.href = '../index.php';
+                    window.location.href = '../crud/addFrom_request.php';
                 });
             </script>";
             return;

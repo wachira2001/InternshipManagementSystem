@@ -1,32 +1,35 @@
 <?php
-require_once '../../upload_img';
+require_once 'conndb.php';
+
 try {
-    if (
-        isset(
-            $_POST['M_ID'],
-            $_POST['M_Name'],
-            $_POST['M_college'],
-            $_FILES['M_img'],
-            $_POST['M_address']
-        )
-    ) {
+    if (isset(
+        $_POST['M_ID'],
+        $_POST['M_Name'],
+        $_POST['M_college'],
+        $_FILES['M_img'], // ตรวจสอบเฉพาะในกรณีที่มีการอัปเดตภาพ
+        $_POST['M_address']
+    )) {
         $M_ID = $_POST['M_ID'];
         $M_Name = $_POST['M_Name'];
         $M_college = $_POST['M_college'];
-        $M_img = $_FILES['M_img'];
         $M_address = $_POST['M_address'];
 
-        // ตรวจสอบประเภทของไฟล์
-        $filename = $_FILES['M_img']['name'];
-        $ext = pathinfo($filename, PATHINFO_EXTENSION);
-        // อัปโหลดไฟล์
-        $fileName = $M_ID . '.' . "jpg";
-        $targetFilePath = '../../upload_img/'. $fileName;
-        move_uploaded_file($_FILES['M_img']['tmp_name'], $targetFilePath);
+        // ตรวจสอบว่ามีการเปลี่ยนแปลงในภาพหรือไม่
+        if (!empty($_FILES['M_img']['name'])) {
+            $filename = $_FILES['M_img']['name'];
+            $ext = pathinfo($filename, PATHINFO_EXTENSION);
+            $fileName = $M_ID.'.'.$ext;
+            $targetFilePath ='../../../upload_img/'.$fileName;
 
-
-
-        // คำสั่ง SQL UPDATE
+            // อัปโหลดไฟล์
+            move_uploaded_file($_FILES['M_img']['tmp_name'], $targetFilePath);
+        } else {
+            $sql = "SELECT * FROM major";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $fileName =  $result['M_img'];
+        }
         $updateStmt = $conn->prepare("UPDATE major 
                                       SET 
                                           M_Name = :M_Name,
@@ -34,12 +37,13 @@ try {
                                           M_img = :M_img,
                                           M_address = :M_address
                                       WHERE M_ID = :M_ID");
+
         // กำหนดค่าพารามิเตอร์
-        $updateStmt->bindParam(':M_ID', $M_ID, PDO::PARAM_STR);
         $updateStmt->bindParam(':M_Name', $M_Name, PDO::PARAM_STR);
         $updateStmt->bindParam(':M_college', $M_college, PDO::PARAM_STR);
         $updateStmt->bindParam(':M_img', $fileName, PDO::PARAM_STR);
         $updateStmt->bindParam(':M_address', $M_address, PDO::PARAM_STR);
+        $updateStmt->bindParam(':M_ID', $M_ID, PDO::PARAM_STR);
 
         // ทำการ execute คำสั่ง SQL
         if ($updateStmt->execute()) {

@@ -51,7 +51,7 @@ $conn = null;
         <meta property="og:type" content="Website">
         <meta property="og:site_name" content="Bootstrap Gallery">
         <title>แก้ไขข้อมูลแผนก</title>
-        <link rel="icon" type="image/png" href="../../assets/icon/ic-home.png">
+        <link rel="icon" type="image/png" href="../../../upload_img/<?php echo $major['M_img'];?>">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -245,61 +245,31 @@ $conn = null;
                                                 </div>
                                                 <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-4 col-sm-4 col-12">
                                                     <div class="mb-3">
-                                                        <label for="inputEmail" class="form-label">ระดับชั้น</label>
+                                                        <label for="inputEmail" class="form-label">ชั้น</label>
                                                         <input type="email" class="form-control" id="inputEmail" placeholder="Enter Email" name="R_level"
-                                                               value="<?php echo $room['R_level'];?>" readonly>
+                                                               value="<?php echo $room['R_level'];?>" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-4 col-sm-4 col-12">
                                                     <div class="mb-3">
-                                                        <label for="inputNumber" class="form-label">ปีการศึกษา</label>
-                                                        <input type="text" class="form-control" id="inputNumber" placeholder="Enter Phone Number" name="R_year"
-                                                               value="<?php echo $room['R_year'];?> " readonly>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-4 col-sm-4 col-12">
-                                                    <div class="mb-3">
-                                                        <label for="inputNumber" class="form-label">ชื่อนักเรียน</label>
-                                                        <input type="text" class="form-control" id="inputNumber" placeholder="Enter Phone Number" name="S_fname"
-                                                               value="<?php echo $room['S_fname'];?> <?php echo $room['S_lname'];?> "  readonly>
-                                                        <input type="hidden" class="form-control" id="inputNumber" name="S_ID"
-                                                               value="<?php echo $room['S_ID'];?> " readonly>
+                                                        <label for="inputNumber" class="form-label">ระดับชั้น</label>
+                                                        <input type="text" class="form-control" id="inputNumber" placeholder="Enter Phone Number" name="R_level_numder"
+                                                               value="<?php echo $room['R_level_numder'];?> " required>
                                                     </div>
                                                 </div>
 
+
                                                 <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-4 col-sm-4 col-12">
                                                     <div class="mb-3">
-                                                        <label for="inputNumber" class="form-label">แผนก</label>
-                                                        <input type="text" class="form-control" id="inputNumber" placeholder="Enter Phone Number" name="S_major"
-                                                               value="<?php echo $room['S_major'];?>"  readonly>
+                                                        <label for="inputNumber" class="form-label">ห้อง</label>
+                                                        <input type="text" class="form-control" id="inputNumber" placeholder="Enter Phone Number" name="R_room"
+                                                               value="<?php echo $room['R_room'];?>"  required>
                                                     </div>
                                                 </div>
-                                                <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-4 col-sm-4 col-12">
-                                                    <div class="mb-3">
-                                                        <label for="T_ID" class="form-label">เลือกครู (T_ID):</label>
-                                                        <select name="T_ID" id="T_ID" class="form-select" required>
-                                                            <?php foreach ($teachers as $teacher) : ?>
-                                                                <?php
-                                                                // เช็คว่า T_ID ของครูนี้เท่ากับ T_ID ที่ต้องการให้เป็นค่าเริ่มต้นหรือไม่
-                                                                $selected = ($teacher['T_ID'] == $room['T_ID']) ? 'selected' : '';
-                                                                ?>
-                                                                <option name="T_ID" value="<?php echo $teacher['T_ID']; ?>" <?php echo $selected; ?>>
-                                                                    <?php echo $teacher['T_fname']; ?>  <?php echo $teacher['T_lname']; ?>
-                                                                </option>
-                                                            <?php endforeach; ?>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Row end -->
-
-                                                <!-- Form actions footer start -->
                                                 <div class="form-actions-footer">
                                                     <button class="btn btn-light" type="button" onclick="showConfirmation()">ยกเลิก</button>
                                                     <button class="btn btn-success" type="button" onclick="saveData()">บันทึก</button>
                                                 </div>
-                                                <!-- Form actions footer end -->
-
                                             </div>
                                         </div>
                                     </form>
@@ -346,29 +316,6 @@ $conn = null;
         <!-- ไฟล์ JavaScript หลัก -->
         <script src="../../../assets/js/main.js"></script>
         <script>
-            document.getElementById('imageInput').addEventListener('change', function (e) {
-                var preview = document.getElementById('previewImage');
-                var file = e.target.files[0];
-                var reader = new FileReader();
-
-                reader.onloadend = function () {
-                    preview.src = reader.result;
-                };
-
-                if (file) {
-                    reader.readAsDataURL(file);
-                } else {
-                    preview.src = "#";
-                }
-            });
-
-            // เมื่อกดปุ่ม "บันทึก" หรือ "อัพโหลดใหม่"
-            function saveImage() {
-                // ส่งข้อมูลรูปภาพไปยังเซิร์ฟเวอร์
-                // ทำการอัพเดทในฐานข้อมูล
-                // หลังจากอัพเดทสำเร็จ, ทำการแทนที่รูปภาพเก่าด้วยรูปภาพใหม่
-                document.getElementById('currentImage').src = document.getElementById('previewImage').src;
-            }
             function showConfirmation() {
                 // แสดง SweetAlert หรือโค้ดที่ใช้ในการยืนยันก่อนที่จะยกเลิก
                 Swal.fire({

@@ -1,6 +1,6 @@
 <?php
-require_once '../../../config/conndb.php';
-require_once '../../../config/show_data.php';
+include_once '../../services_teacher/conndb.php';
+include_once '../../../config/show_data.php';
 // ตรวจสอบ session
 session_start();
 echo '
@@ -27,8 +27,6 @@ $user = getuserT($conn,$_SESSION['username']);
 $major = getmajor($conn);
 $T_ID = $_GET['T_ID'];
 $teachers = getTeachers($conn,$T_ID);
-// ปิดการเชื่อมต่อ
-$conn = null;
 //print_r($teachers);
 //return;
 ?>
@@ -50,7 +48,7 @@ $conn = null;
         <meta property="og:type" content="Website">
         <meta property="og:site_name" content="Bootstrap Gallery">
         <title>แก้ไขข้อมูลแผนก</title>
-        <link rel="icon" type="image/png" href="../../assets/icon/ic-home.png">
+        <link rel="icon" type="image/png" href="../../../upload_img/<?php echo $major['M_img'];?>">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -93,7 +91,7 @@ $conn = null;
 
             <!-- ส่วนเริ่มต้นของแบรนด์ในไซด์บาร์ -->
             <div class="sidebar-brand">
-                <a href="../index.php" class="logo">
+                <a href="../../index.php" class="logo">
                 <span class="avatar">
                     <img src="../../../upload_img/<?php echo $major['M_img'];?>" alt="Admin Dashboards" style="width: auto;height: 100px"/>
                 </span>
@@ -119,17 +117,17 @@ $conn = null;
                             <div class="sidebar-submenu">
                                 <ul>
                                     <?php
+                                    // เงื่อนไขเพื่อตรวจสอบบทบาท
                                     if ($user['T_status'] == '1' ) {
                                         ?>
-
-                                        <li>
-                                            <a href="showdata_major.php" >ข้อมูลแผนก</a>
-                                        </li>
                                         <li>
                                             <a href="showdata_teacher.php" class="current-page">ข้อมูลบุคลากร</a>
                                         </li>
                                         <li>
-                                            <a href="showdata_student.php" >ข้อมูลนักศึกษา</a>
+                                            <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
+                                        </li>
+                                        <li>
+                                            <a href="showdata_major.php">ข้อมูลแผนก</a>
                                         </li>
                                         <li>
                                             <a href="showdata_room.php">ข้อมูลห้องเรียน</a>
@@ -137,18 +135,25 @@ $conn = null;
                                         <li>
                                             <a href="showdata_company.php" >ข้อมูลสถานประกอบการ</a>
                                         </li>
-
+                                        <li>
+                                            <a href="showdata_request.php" >อนุมัติคำร้อง</a>
+                                        </li>
                                         <?php
                                     }else{
 
                                         ?>
                                         <li>
-                                            <a href="showdata_student.php">ข้อมูลนักศึกษา</a>
+                                            <a href="../crud/showdata_student.php" >ข้อมูลนักศึกษา</a>
+                                        </li>
+                                        <li>
+                                            <a href="../crud/showdata_room.php">ข้อมูลห้องเรียน</a>
+                                        </li>
+                                        <li>
+                                            <a href="../crud/showdata_request.php">อนุมัติคำร้อง</a>
                                         </li>
                                         <?php
                                     }
                                     ?>
-
                                 </ul>
                             </div>
                         </li>
@@ -343,20 +348,32 @@ $conn = null;
                                                            value="<?= $teachers['T_username']; ?>" readonly>
 
                                                 </div>
+<!--                                                <div class="col-3 py-3">-->
+<!---->
+<!--                                                    <label for="inputName" class="form-label">Password</label>-->
+<!--                                                    <input type="text" class="form-control" id="inputP" name="T_password"-->
+<!--                                                           placeholder="T_password"-->
+<!--                                                           value="--><?php //= $teachers['T_password']; ?><!--" readonly>-->
+<!---->
+<!--                                                </div>-->
                                                 <div class="col-3 py-3">
-
-                                                    <label for="inputName" class="form-label">Password</label>
-                                                    <input type="text" class="form-control" id="inputP" name="T_password"
-                                                           placeholder="T_password"
-                                                           value="<?= $teachers['T_password']; ?>" readonly>
-
+                                                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                                                    <div class="input-group">
+                                                        <input type="password" class="form-control" id="password" name="T_password" placeholder="password"
+                                                               value="<?= $teachers['T_password']; ?>" readonly>
+                                                        <div class="input-group-append">
+                                                            <button type="button" class="btn btn-outline-secondary password-toggle-button" onclick="togglePasswordVisibility()">
+                                                                <i id="eye-icon" class="bi bi-eye"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                                 <div class="col-3 py-3">
 
                                                     <label for="inputName" class="form-label">ที่อยู่</label>
                                                     <textarea type="text" class="form-control" id="inputName" name="T_address"
-                                                              placeholder="ตำแหน่ง"
+                                                              placeholder="ที่อยู่"
                                                     > <?= $teachers['T_address']; ?></textarea>
 
                                                 </div>
@@ -411,40 +428,17 @@ $conn = null;
         <script src="../../../assets/js/modernizr.js"></script>
         <script src="../../../assets/js/moment.js"></script>
 
-        <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->
-        <script src="../../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
-        <script src="../../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-        <script src="../../../assets/vendor/apex/apexcharts.min.js"></script>
-        <script src="../../../assets/vendor/apex/custom/sales/salesGraph.js"></script>
-        <script src="../../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>
-        <script src="../../../assets/vendor/apex/custom/sales/taskGraph.js"></script>
+<!--        <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->
+<!--        <script src="../../../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>-->
+<!--        <script src="../../../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>-->
+<!--        <script src="../../../assets/vendor/apex/apexcharts.min.js"></script>-->
+<!--        <script src="../../../assets/vendor/apex/custom/sales/salesGraph.js"></script>-->
+<!--        <script src="../../../assets/vendor/apex/custom/sales/revenueGraph.js"></script>-->
+<!--        <script src="../../../assets/vendor/apex/custom/sales/taskGraph.js"></script>-->
 
         <!-- ไฟล์ JavaScript หลัก -->
         <script src="../../../assets/js/main.js"></script>
         <script>
-            document.getElementById('imageInput').addEventListener('change', function (e) {
-                var preview = document.getElementById('previewImage');
-                var file = e.target.files[0];
-                var reader = new FileReader();
-
-                reader.onloadend = function () {
-                    preview.src = reader.result;
-                };
-
-                if (file) {
-                    reader.readAsDataURL(file);
-                } else {
-                    preview.src = "#";
-                }
-            });
-
-            // เมื่อกดปุ่ม "บันทึก" หรือ "อัพโหลดใหม่"
-            function saveImage() {
-                // ส่งข้อมูลรูปภาพไปยังเซิร์ฟเวอร์
-                // ทำการอัพเดทในฐานข้อมูล
-                // หลังจากอัพเดทสำเร็จ, ทำการแทนที่รูปภาพเก่าด้วยรูปภาพใหม่
-                document.getElementById('currentImage').src = document.getElementById('previewImage').src;
-            }
             function showConfirmation() {
                 // แสดง SweetAlert หรือโค้ดที่ใช้ในการยืนยันก่อนที่จะยกเลิก
                 Swal.fire({
@@ -479,6 +473,31 @@ $conn = null;
                     }
                 });
             }
+            // กำหนดฟังก์ชันชื่อ togglePasswordVisibility
+            function togglePasswordVisibility() {
+                // ดึงอิลิเมนต์ DOM ที่มี id "password" และเก็บไว้ในตัวแปร passwordField
+                var passwordField = document.getElementById("password");
+
+                // ดึงอิลิเมนต์ DOM ที่มี id "eye-icon" และเก็บไว้ในตัวแปร eyeIcon
+                var eyeIcon = document.getElementById("eye-icon");
+
+                // ตรวจสอบว่าแอตทริบิวต์ type ของฟิลด์รหัสผ่านในปัจจุบันตั้งค่าเป็น "password" หรือไม่
+                if (passwordField.type === "password") {
+                    // ถ้าใช่, เปลี่ยนแอตทริบิวต์ type เป็น "text" (เปิดเผยรหัสผ่าน)
+                    passwordField.type = "text";
+
+                    // ลบคลาส "bi-eye" ออกจากไอคอนตา และเพิ่มคลาส "bi-eye-slash"
+                    eyeIcon.classList.remove("bi-eye");
+                    eyeIcon.classList.add("bi-eye-slash");
+                } else {
+                    // ถ้าแอตทริบิวต์ไม่ได้เป็น "password" (เป็นไปได้ว่าเป็น "text"), เปลี่ยนกลับเป็น "password"
+                    passwordField.type = "password";
+
+                    // ลบคลาส "bi-eye-slash" ออกจากไอคอนตา และเพิ่มคลาส "bi-eye"
+                    eyeIcon.classList.remove("bi-eye-slash");
+                    eyeIcon.classList.add("bi-eye");
+                }
+            }
 
         </script>
 
@@ -489,4 +508,5 @@ $conn = null;
     </html>
 <?php
 require_once '../../services_teacher/update_teacher.php';
+$conn = null;
 ?>

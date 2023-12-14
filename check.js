@@ -1,55 +1,65 @@
+// กำหนดฟังก์ชันชื่อ togglePasswordVisibility
+function togglePasswordVisibility() {
+    // ดึงอิลิเมนต์ DOM ที่มี id "password" และเก็บไว้ในตัวแปร passwordField
+    var passwordField = document.getElementById("password");
 
-function validateForm() {
-    var T_ID = document.getElementById('T_ID').value;
-    var T_fname = document.getElementById('T_fname').value;
-    var T_lname = document.getElementById('T_lname').value;
-    var T_gender = document.getElementById('T_gender').value;
-    var T_birthday = document.getElementById('T_birthday').value;
-    var T_position = document.getElementById('T_position').value;
-    var T_phone = document.getElementById('T_phone').value;
-    var T_email = document.getElementById('T_email').value;
-    var T_address = document.getElementById('T_address').value;
-    var T_img = document.getElementById('T_img').value;
-    var T_username = document.getElementById('T_username').value;
-    var T_password = document.getElementById('T_password').value;
+    // ดึงอิลิเมนต์ DOM ที่มี id "eye-icon" และเก็บไว้ในตัวแปร eyeIcon
+    var eyeIcon = document.getElementById("eye-icon");
 
-    // ทำตรวจสอบข้อมูลตามที่ต้องการ
-    if (T_ID === '' || T_fname === '' || T_lname === '' || T_gender === 'Choose...' || T_birthday === '' || T_position === '' || T_phone === '' || T_email === '' || T_address === '' || T_img === '' || T_username === '' || T_password === '') {
-        Swal.fire({
-            icon: 'error',
-            title: 'กรุณากรอกข้อมูลให้ครบทุกช่อง',
-            text: '',
-        });
-        return false;
+    // ตรวจสอบว่าแอตทริบิวต์ type ของฟิลด์รหัสผ่านในปัจจุบันตั้งค่าเป็น "password" หรือไม่
+    if (passwordField.type === "password") {
+        // ถ้าใช่, เปลี่ยนแอตทริบิวต์ type เป็น "text" (เปิดเผยรหัสผ่าน)
+        passwordField.type = "text";
+
+        // ลบคลาส "bi-eye" ออกจากไอคอนตา และเพิ่มคลาส "bi-eye-slash"
+        eyeIcon.classList.remove("bi-eye");
+        eyeIcon.classList.add("bi-eye-slash");
+    } else {
+        // ถ้าแอตทริบิวต์ไม่ได้เป็น "password" (เป็นไปได้ว่าเป็น "text"), เปลี่ยนกลับเป็น "password"
+        passwordField.type = "password";
+
+        // ลบคลาส "bi-eye-slash" ออกจากไอคอนตา และเพิ่มคลาส "bi-eye"
+        eyeIcon.classList.remove("bi-eye-slash");
+        eyeIcon.classList.add("bi-eye");
     }
-
-    // ตรวจสอบรูปแบบ email ต่อไปนี้
-    var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    if (!T_email.match(emailPattern)) {
-        Swal.fire({
-            icon: 'error',
-            title: 'รูปแบบ E-gmail ไม่ถูกต้อง',
-            text: '',
-        });
-        return false;
-    }
-
-    // ตรวจสอบรูปแบบเบอร์โทรศัพท์ต่อไปนี้
-    var phonePattern = /^\d{10}$/;
-    if (!T_phone.match(phonePattern)) {
-        Swal.fire({
-            icon: 'error',
-            title: 'รูปแบบเบอร์โทรศัพท์ไม่ถูกต้อง',
-            text: '',
-        });
-        return false;
-    }
-
-    // อื่น ๆ ตรวจสอบตามที่ต้องการ
-
-    // ถ้าผ่านการตรวจสอบทั้งหมด
-    return true;
 }
-
-
-
+function cancelAction() {
+    // แสดง SweetAlert หรือโค้ดที่ใช้ในการยืนยันก่อนที่จะยกเลิก
+    Swal.fire({
+        title: 'คุณแน่ใจหรือไม่?',
+        text: 'การกระทำนี้จะยกเลิกขั้นตอนที่คุณทำ',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'ใช่, ยกเลิก!',
+        cancelButtonText: 'ยกเลิก'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // กระทำเมื่อยืนยัน
+            console.log('Cancel action');
+        }
+    });
+}
+function submitForm() {
+    // แสดง SweetAlert หรือโค้ดที่ใช้ในการยืนยันก่อนที่จะยกเลิก
+    Swal.fire({
+        title: 'คุณแน่ใจหรือไม่?',
+        text: 'การกระทำนี้จะยกเลิกขั้นตอนที่คุณทำ',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'ใช่, ยกเลิก!',
+        cancelButtonText: 'ยกเลิก'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // กระทำเมื่อยืนยัน
+            console.log('Submit form action');
+        }
+    });
+}
+function myFunction() {
+    let x = document.getElementById("myDate").max = "2015-01-01";
+    document.getElementById("demo").innerHTML = "กรุณาป้อนอยู่ระหว่าง  '1950-01-01' to '2015-01-01'.";
+}

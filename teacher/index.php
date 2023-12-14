@@ -26,6 +26,7 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'H' && $_SESSION['ro
 
 $user = getuserT($conn,$_SESSION['username']);
 $major = getmajor($conn);
+print_r($_SESSION);
 // ปิดการเชื่อมต่อ
 $conn = null;
 //print_r($user);
@@ -46,7 +47,7 @@ $conn = null;
         <meta property="og:type" content="Website">
         <meta property="og:site_name" content="Bootstrap Gallery">
         <title>หน้าแรก</title>
-        <link rel="icon" type="image/png" href="../upload_img/1.jpg">
+        <link rel="icon" type="image/png" href="../upload_img/<?php echo $major['M_img'];?>">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -119,10 +120,6 @@ $conn = null;
                                     // เงื่อนไขเพื่อตรวจสอบบทบาท
                                     if ($user['T_status'] == '1' ) {
                                         ?>
-
-                                        <li>
-                                            <a href="Hearder/crud/showdata_major.php">ข้อมูลแผนก</a>
-                                        </li>
                                         <li>
                                             <a href="Hearder/crud/showdata_teacher.php" >ข้อมูลบุคลากร</a>
                                         </li>
@@ -130,20 +127,29 @@ $conn = null;
                                             <a href="Hearder/crud/showdata_student.php">ข้อมูลนักศึกษา</a>
                                         </li>
                                         <li>
+                                            <a href="Hearder/crud/showdata_major.php">ข้อมูลแผนก</a>
+                                        </li>
+                                        <li>
                                             <a href="Hearder/crud/showdata_room.php">ข้อมูลห้องเรียน</a>
                                         </li>
                                         <li>
                                             <a href="Hearder/crud/showdata_company.php" >ข้อมูลสถานประกอบการ</a>
+                                        </li>
+                                        <li>
+                                            <a href="Hearder/crud/showdata_request.php" >อนุมัติคำร้อง</a>
                                         </li>
                                         <?php
                                     }else{
 
                                         ?>
                                         <li>
+                                            <a href="crud/showdata_student.php" >ข้อมูลนักศึกษา</a>
+                                        </li>
+                                        <li>
                                             <a href="crud/showdata_room.php">ข้อมูลห้องเรียน</a>
                                         </li>
                                         <li>
-                                            <a href="crud/showdata_student.php" >ข้อมูลนักศึกษา</a>
+                                            <a href="crud/showdata_request.php">อนุมัติคำร้อง</a>
                                         </li>
                                         <?php
                                     }
@@ -193,7 +199,7 @@ $conn = null;
                                     <!-- คำสั่งการดำเนินการในโปรไฟล์ -->
                                     <div class="header-profile-actions">
                                         <a href="crud/editFrom_profile.php">โปรไฟล์</a>
-                                        <a href="../config/logout.php">ออกจากระบบ</a>
+                                        <a href="#" onclick="showConfirmationLogout()">ออกจากระบบ</a>
                                     </div>
                                     <!-- ส่วนจบของคำสั่งการดำเนินการในโปรไฟล์ -->
                                 </div>
@@ -216,7 +222,9 @@ $conn = null;
 
                 <!-- ส่วนเริ่มต้นของคอนเทนเนอร์ -->
 
-
+                <div class="content-wrapper">
+                    หน้าแรก
+                </div>
                 <!-- ส่วนจบของคอนเทนเนอร์ -->
 
                 <!-- เริ่มต้นของ App Footer -->
@@ -240,13 +248,13 @@ $conn = null;
         <script src="../assets/js/modernizr.js"></script>
         <script src="../assets/js/moment.js"></script>
 
-        <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->
-        <script src="../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
-        <script src="../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-        <script src="../assets/vendor/apex/apexcharts.min.js"></script>
-        <script src="../assets/vendor/apex/custom/sales/salesGraph.js"></script>
-        <script src="../assets/vendor/apex/custom/sales/revenueGraph.js"></script>
-        <script src="../assets/vendor/apex/custom/sales/taskGraph.js"></script>
+<!--        <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->-->
+<!--        <script src="../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>-->
+<!--        <script src="../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>-->
+<!--        <script src="../assets/vendor/apex/apexcharts.min.js"></script>-->
+<!--        <script src="../assets/vendor/apex/custom/sales/salesGraph.js"></script>-->
+<!--        <script src="../assets/vendor/apex/custom/sales/revenueGraph.js"></script>-->
+<!--        <script src="../assets/vendor/apex/custom/sales/taskGraph.js"></script>-->
 
         <!-- ไฟล์ JavaScript หลัก -->
         <script src="../assets/js/main.js"></script>
@@ -282,6 +290,24 @@ $conn = null;
                 }).then((result) => {
                     if (result.isConfirmed) {
                         document.querySelector('form').submit();
+                    }
+                });
+            }
+            function showConfirmationLogout() {
+                // แสดง SweetAlert หรือโค้ดที่ใช้ในการยืนยันก่อนที่จะยกเลิก
+                Swal.fire({
+                    title: 'คุณแน่ใจหรือไม ?',
+                    text: 'ออกจากระบบ',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'ออกจากระบบ',
+                    cancelButtonText: 'ยกเลิก'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // กระทำเมื่อยืนยัน
+                        window.location.href = '../config/logout.php';
                     }
                 });
             }

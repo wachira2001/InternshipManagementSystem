@@ -25,11 +25,30 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'H' && $_SESSION['ro
 }
 
 $userT = getuserT($conn,$_SESSION['username']);
-$userS = getstudentToID($conn,$_SESSION['data']['T_ID']);
+$getstudentToID = getstudentToID($conn,$_SESSION['data']['T_ID']);
 $stmtD = getmajor($conn);
+
+
+if (isset($_GET['search']) && $_GET['search'] != '') {
+    // ประกาศตัวแปรรับค่าจากฟอร์ม
+    $search = "%" . $_GET['search'] . "%";
+    $getstudentToID = getstudentToID($conn,$_SESSION['data']['T_ID'],$search);
+} else {
+    // คิวรี่ข้อมูลมาแสดงตามปกติ *แสดงทั้งหมด
+    $search = '';
+    $getstudentToID = getstudentToID($conn,$_SESSION['data']['T_ID'],$search);
+}
+
+
+
+
+
+
+
+
 // ปิดการเชื่อมต่อ
 $conn = null;
-//print_r($user);
+//print_r($getstudentToID);
 //return;
 ?>
 
@@ -50,7 +69,7 @@ $conn = null;
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
     <title>ข้อมูลนักศึกษา</title>
-    <link rel="icon" type="image/png" href="../../upload_img/1.jpg">
+    <link rel="icon" type="image/png" href="../../upload_img/<?php echo $stmtD['M_img'];?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -151,6 +170,9 @@ $conn = null;
                                     <li>
                                         <a href="showdata_student.php" class="current-page">ข้อมูลนักศึกษา</a>
                                     </li>
+                                    <li>
+                                        <a href="showdata_request.php" >อนุมัติคำร้อง</a>
+                                    </li>
                                     <?php
                                 }
                                 ?>
@@ -220,7 +242,30 @@ $conn = null;
 
             <!-- ส่วนเริ่มต้นของคอนเทนเนอร์ -->
             <div class="content-wrapper">
-
+                <div class="search-container m-2">
+                    <form action="showdata_student.php" method="get">
+                        <!-- Search input group start -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="search" placeholder="ค้นหาชื่อนักศึกษา"
+                                   value="<?php if (isset($_GET['search'])) {
+                                       echo $_GET['search'];
+                                   } ?>">
+                            <button class="btn" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <!--                --><?php
+                    //                // แสดงข้อความที่ค้นหา
+                    //                if (isset($_GET['search']) && $_GET['search'] != '') {
+                    //                    if (count($getrequestall) > 0) {
+                    //                        echo '<font color="red"> ข้อมูลการค้นหา : ' . $_GET['search'];
+                    //                        echo ' *พบ ' . count($getrequestall) . ' รายการ</font><br><br>';
+                    //                        echo count($getrequestall);
+                    //                    }
+                    //                }
+                    //                ?>
+                </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table m-0">
@@ -230,7 +275,9 @@ $conn = null;
                                 <th>ชื่อ</th>
                                 <th>สกุล</th>
                                 <th>สาขา</th>
+                                <th>ระดับชั้น</th>
                                 <th>ชั้น</th>
+                                <th>ห้อง</th>
                                 <th>ภาคเรียนที่ออกฝึกงาน</th>
                                 <th>ปีการศึกษาที่ออกฝึกงาน</th>
                                 <th>ครูที่ปรึกษา</th>
@@ -238,13 +285,20 @@ $conn = null;
                             </tr>
                             </thead>
                             <tbody>
-                            <?php foreach ($userS as $student) { ?>
+                            <?php if (empty($getstudentToID)) : ?>
+                                <tr>
+                                    <td colspan="12" class="text-center">ไม่มีข้อมูล</td>
+                                </tr>
+                            <?php else : ?>
+                            <?php foreach ($getstudentToID as $student) : ?>
                                 <tr>
                                     <th><?=$student['S_ID'];?></th>
                                     <td><?=$student['S_fname'];?></td>
                                     <td><?=$student['S_lname'];?></td>
                                     <td><?=$student['S_major'];?></td>
-                                    <td><?=$student['S_level'];?></td>
+                                    <td><?=$student['R_level'];?></td>
+                                    <td><?=$student['R_room'];?></td>
+                                    <td><?=$student['R_level_numder'];?></td>
                                     <td><?=$student['S_enrollment_term'];?></td>
                                     <th><?=$student['S_enrollment_year'];?></th>
                                     <td><?=$student['T_fname'];?></td>
@@ -254,7 +308,8 @@ $conn = null;
 <!--                                        <a href="services/delete_user.php?iduser=--><?php //=$student['S_ID'];?><!--"><button class="btn btn-danger">ลบ</button></a>-->
                                     </td>
                                 </tr>
-                            <?php } ?>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
 
                             </tbody>
                         </table>

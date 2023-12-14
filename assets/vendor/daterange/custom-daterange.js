@@ -198,6 +198,7 @@ $('.datepicker-range-top-left').daterangepicker({
 
 
 
+// Date Range Auto Apply
 $('.datepicker-range-auto-apply').daterangepicker({
 	autoApply: true,
 	drops: 'up',
@@ -205,41 +206,51 @@ $('.datepicker-range-auto-apply').daterangepicker({
 	startDate: moment().startOf('hour'),
 	endDate: moment().startOf('hour').add(32, 'hour'),
 	locale: {
-		format: 'DD/MM/YYYY'
+		format: 'DD/MM/YYYY',
+		daysOfWeek: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+		monthNames: [
+			'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+			'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+		]
+	},
+	isInvalidDate: function (date) {
+		// ไม่ให้เลือกวันย้อนหลัง
+		return date.isBefore(moment().startOf('day'));
 	}
 });
 
-
-// Custom Date Range
+// Custom Date Range 1
 $(function() {
 	var start = moment().subtract(29, 'days');
 	var end = moment();
 	function cb(start, end) {
-		$('.custom-daterange span').html(start.format('MMM D, YYYY') + ' - ' + end.format('MMM D, YYYY'));
+		$('.custom-daterange span').html(start.format('D MMM YYYY') + ' - ' + end.format('D MMM YYYY'));
 	}
 	$('.custom-daterange').daterangepicker({
 		opens: 'left',
 		startDate: start,
 		endDate: end,
 		ranges: {
-			'Today': [moment(), moment()],
-			'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-			'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-			'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-			'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+			'วันนี้': [moment(), moment()],
+			'เมื่อวาน': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+			'7 วันที่ผ่านมา': [moment().subtract(6, 'days'), moment()],
+			'30 วันที่ผ่านมา': [moment().subtract(29, 'days'), moment()],
+			'เดือนที่แล้ว': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+		},
+		isInvalidDate: function (date) {
+			// ไม่ให้เลือกวันย้อนหลัง
+			return date.isBefore(moment().startOf('day'));
 		}
 	}, cb);
 	cb(start, end);
 });
 
-
-
-// Custom Date Range
+// Custom Date Range 2
 $(function() {
 	var start = moment().subtract(29, 'days');
 	var end = moment();
 	function cb(start, end) {
-		$('.custom-daterange2 span').html(start.format('MMM D, YYYY') + ' - ' + end.format('MMM D, YYYY'));
+		$('.custom-daterange2 span').html(start.format('D MMM YYYY') + ' - ' + end.format('D MMM YYYY'));
 	}
 	$('.custom-daterange2').daterangepicker({
 		autoApply: true,
@@ -247,11 +258,15 @@ $(function() {
 		startDate: start,
 		endDate: end,
 		ranges: {
-			'Today': [moment(), moment()],
-			'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-			'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-			'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-			'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+			'วันนี้': [moment(), moment()],
+			'เมื่อวาน': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+			'7 วันที่ผ่านมา': [moment().subtract(6, 'days'), moment()],
+			'30 วันที่ผ่านมา': [moment().subtract(29, 'days'), moment()],
+			'เดือนที่แล้ว': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+		},
+		isInvalidDate: function (date) {
+			// ไม่ให้เลือกวันย้อนหลัง
+			return date.isBefore(moment().startOf('day'));
 		}
 	}, cb);
 	cb(start, end);

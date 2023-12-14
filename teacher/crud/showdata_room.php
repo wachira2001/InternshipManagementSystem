@@ -26,9 +26,19 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'H' && $_SESSION['ro
 
 $user = getuserT($conn,$_SESSION['username']);
 $stmtD = getmajor($conn);
-$room = getroomToTID($conn,$_SESSION['data']['T_ID']);
-//print_r($room);
+//$room = getroomToRID($conn,$_SESSION['data']['R_ID']);
+//print_r($_SESSION['data']['R_ID']);
 //return;
+if (isset($_GET['search']) && $_GET['search'] != '') {
+    // ประกาศตัวแปรรับค่าจากฟอร์ม
+    $search = "%" . $_GET['search'] . "%";
+    $room = getroomToRID($conn,$_SESSION['data']['R_ID'],$search);
+} else {
+    // คิวรี่ข้อมูลมาแสดงตามปกติ *แสดงทั้งหมด
+    $search = '';
+    $room = getroomToRID($conn,$_SESSION['data']['R_ID'],$search);
+}
+
 $conn = null;
 ?>
 
@@ -49,7 +59,7 @@ $conn = null;
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
     <title>ข้อมูลห้อง</title>
-    <link rel="icon" type="image/png" href="../../upload_img/1.jpg">
+    <link rel="icon" type="image/png" href="../../upload_img/<?php echo $stmtD['M_img'];?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -150,6 +160,9 @@ $conn = null;
                                     <li>
                                         <a href="showdata_student.php" >ข้อมูลนักศึกษา</a>
                                     </li>
+                                    <li>
+                                        <a href="showdata_request.php" >อนุมัติคำร้อง</a>
+                                    </li>
                                     <?php
                                 }
                                 ?>
@@ -219,7 +232,30 @@ $conn = null;
 
             <!-- ส่วนเริ่มต้นของคอนเทนเนอร์ -->
             <div class="content-wrapper">
-
+                <div class="search-container m-2">
+                    <form action="showdata_room.php" method="get">
+                        <!-- Search input group start -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="search" placeholder="ค้นหาชื่อนักศึกษา"
+                                   value="<?php if (isset($_GET['search'])) {
+                                       echo $_GET['search'];
+                                   } ?>">
+                            <button class="btn" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <!--                --><?php
+                    //                // แสดงข้อความที่ค้นหา
+                    //                if (isset($_GET['search']) && $_GET['search'] != '') {
+                    //                    if (count($getrequestall) > 0) {
+                    //                        echo '<font color="red"> ข้อมูลการค้นหา : ' . $_GET['search'];
+                    //                        echo ' *พบ ' . count($getrequestall) . ' รายการ</font><br><br>';
+                    //                        echo count($getrequestall);
+                    //                    }
+                    //                }
+                    //                ?>
+                </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table m-0">
@@ -229,9 +265,11 @@ $conn = null;
                                 <th>รหัสห้องเรียน</th>
                                 <th>สาขา</th>
                                 <th>ชั้น</th>
+                                <th>ระดับชั้น</th>
+                                <th>ลำดับห้อง</th>
                                 <th>ปี</th>
-                                <th>ชื่อครูที่ปรึกษา</th>
                                 <th>ชื่อนักเรียน</th>
+                                <th>ชื่อครูที่ปรึกษา</th>
                                 <th> </th>
                                 <th> </th>
                                 <th> </th>
@@ -241,14 +279,21 @@ $conn = null;
                             </tr>
                             </thead>
                             <tbody>
-                            <?php foreach ($room as $rooms) { ?>
+                            <?php if (empty($room)) : ?>
+                                <tr>
+                                    <td colspan="13" class="text-center">ไม่พบข้อมูล</td>
+                                </tr>
+                            <?php else : ?>
+                                <?php foreach ($room as $rooms) : ?>
                                 <tr>
                                     <th><?=$rooms['R_ID'];?></th>
                                     <td><?=$rooms['S_major'];?></td>
                                     <td><?=$rooms['R_level'];?></td>
-                                    <td><?=$rooms['R_year'];?></td>
-                                    <td><?=$rooms['T_fname'];?></td>
+                                    <td><?=$rooms['R_level_numder'];?></td>
+                                    <td><?=$rooms['R_room'];?></td>
+                                    <td><?=$rooms['S_enrollment_year'];?></td>
                                     <td><?=$rooms['S_fname'];?></td>
+                                    <td><?=$rooms['T_fname'];?></td>
 
                                     <td></td>
                                     <td></td>
@@ -259,7 +304,28 @@ $conn = null;
 <!--                                        <a href="editFrom_room.php?R_ID=--><?php //=$rooms['R_ID'];?><!--"><button class="btn btn-primary">แก้ไข</button></a>-->
                                     </td>
                                 </tr>
-                            <?php } ?>
+                                    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#scrollable">
+                                        Scrolling Content Modal
+                                    </button>
+                                    <div class="modal fade" id="scrollable" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="scrollableLabel" style="display: none;" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-scrollable">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="scrollableLabel">Modal title</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    รายละเอียด
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+                                                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Understood</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            <?php endforeach; ?>
+                            <?php endif; ?>
 
                             </tbody>
                         </table>

@@ -1,3 +1,9 @@
+<?php
+include_once '../config/conndb.php';
+include_once '../config/show_data.php';
+$getroom = getroomall($conn);
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -12,7 +18,7 @@
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
     <title>สมัครสมาชิกสำหรับบุคลากร</title>
-    <link rel="icon" type="image/png" href="../upload_img/1.jpg">
+    <link rel="icon" type="image/png" href="#">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
@@ -67,7 +73,7 @@
             </div>
         </nav>
     </div>
-
+</div>
     <!-- เริ่มต้นของ เนื้อหา content -->
     <div class="content py-3" >
         <div class="card m-5 mx-5 ms-5 my-5 ">
@@ -103,7 +109,9 @@
                         </div>
                         <div class="col-md-2">
                             <label for="T_birthday" class="form-label">วันเดือนปีเกิด</label>
-                            <input type="date" id="T_birthday" class="form-control" name="T_birthday" required>
+                            <input type="date" id="T_birthday" class="form-control" name="T_birthday" required
+                                   min="1950-01-01" max="2015-01-01">
+                            <p id="demo"></p>
                         </div>
                         <div class=" col-md-3">
                             <label for="T_position" class="form-label">ตำแหน่ง</label>
@@ -129,10 +137,19 @@
                         <input type="hidden" class="form-control date-own" id="T_status" name="T_status"
                                value="0" >
 
-                        <div class="mb-3">
+                        <div class="col-md-6">
                             <label for="formFile" class="form-label">อัพรูปภาพตัวเอง</label>
                             <input class="form-control" type="file" id="T_img" name="T_img"  accept="image/jpeg, image/png, image/jpg" required>
                             <!--                    <input class="form-control" type="text" id="T_img" name="T_img">-->
+                        </div>
+                        <div class="col-md-6">
+                            <label for="R_ID" class="form-label">ห้องประจำชั้น</label>
+                            <select name="R_ID" id="R_ID" class="form-select" required>
+                                <option value="">-- เลือกครู --</option>
+                                <?php foreach ($getroom as $room) : ?>
+                                    <option value="<?php echo $room['R_ID']; ?>"><?php echo $room['R_level']; ?>. <?php echo $room['R_room']; ?> ห้อง <?php echo $room['R_level_numder']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
 
                         <div class="container-fluid py-3">
@@ -148,11 +165,23 @@
                                    maxlength="15"
                                    placeholder="ชื่อผู้ใช้" required>
                         </div>
+<!--                        <div class="col-md-12">-->
+<!--                            <label for="S_password" class="form-label">รหัสผ่าน</label>-->
+<!--                            <input type="password" class="form-control" id="T_password" name="T_password"-->
+<!--                                   maxlength="15"-->
+<!--                                   placeholder="รหัสผ่าน" required>-->
+<!--                        </div>-->
                         <div class="col-md-12">
-                            <label for="S_password" class="form-label">รหัสผ่าน</label>
-                            <input type="password" class="form-control" id="T_password" name="T_password"
-                                   maxlength="15"
-                                   placeholder="รหัสผ่าน" required>
+                            <label for="exampleInputPassword1" class="form-label">รหัสผ่าน</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password" name="T_password" placeholder="รหัสผ่าน" required minlength="10" maxlength="15">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-outline-secondary password-toggle-button" onclick="togglePasswordVisibility()">
+                                        <i id="eye-icon" class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                                <div id="emailHelp" class="form-text col-md-12" >ป้อนขันต่ำ 10 ตัวอักษร และไม่เกิน 15 ตัวอักษร</div>
+                            </div>
                         </div>
                         <div style="text-align: center" class="g-4 py-4">
                             <button type="button" class="btn btn-danger" onclick="showConfirmation()">ยกเลิก</button>
@@ -163,6 +192,11 @@
             </div>
 
         </div>
+        <!-- เริ่มต้นของ App Footer -->
+        <div class="app-footer">
+            <span>สาขาเทคโนโลยีธุรกิจดิจิทัล</span>
+        </div>
+        <!-- ส่วนจบของ App Footer -->
     </div>
     <!-- ส่วนจบของ เนื้อหา content -->
 
@@ -172,11 +206,7 @@
 
 
 
-    <!-- เริ่มต้นของ App Footer -->
-    <div class="app-footer">
-        <span>สาขาเทคโนโลยีธุรกิจดิจิทัล</span>
-    </div>
-    <!-- ส่วนจบของ App Footer -->
+
 
 </div>
 
@@ -191,12 +221,12 @@
 <script src="../assets/js/moment.js"></script>
 
 <!-- เริ่มต้นของไฟล์ JavaScript ของ Vendor -->
-<script src="../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
-<script src="../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
-<script src="../assets/vendor/apex/apexcharts.min.js"></script>
-<script src="../assets/vendor/apex/custom/sales/salesGraph.js"></script>
-<script src="../assets/vendor/apex/custom/sales/revenueGraph.js"></script>
-<script src="../assets/vendor/apex/custom/sales/taskGraph.js"></script>
+<!--<script src="../assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>-->
+<!--<script src="../assets/vendor/overlay-scroll/custom-scrollbar.js"></script>-->
+<!--<script src="../assets/vendor/apex/apexcharts.min.js"></script>-->
+<!--<script src="../assets/vendor/apex/custom/sales/salesGraph.js"></script>-->
+<!--<script src="../assets/vendor/apex/custom/sales/revenueGraph.js"></script>-->
+<!--<script src="../assets/vendor/apex/custom/sales/taskGraph.js"></script>-->
 
 <!-- ไฟล์ JavaScript หลัก -->
 <script src="../assets/js/main.js"></script>
@@ -204,6 +234,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="../check.js"></script>
 <script>
     function showConfirmation() {
         // แสดง SweetAlert หรือโค้ดที่ใช้ในการยืนยันก่อนที่จะยกเลิก
@@ -223,42 +254,7 @@
             }
         });
     }
-    function cancelAction() {
-        // แสดง SweetAlert หรือโค้ดที่ใช้ในการยืนยันก่อนที่จะยกเลิก
-        Swal.fire({
-            title: 'คุณแน่ใจหรือไม่?',
-            text: 'การกระทำนี้จะยกเลิกขั้นตอนที่คุณทำ',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'ใช่, ยกเลิก!',
-            cancelButtonText: 'ยกเลิก'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // กระทำเมื่อยืนยัน
-                console.log('Cancel action');
-            }
-        });
-    }
-    function submitForm() {
-        // แสดง SweetAlert หรือโค้ดที่ใช้ในการยืนยันก่อนที่จะยกเลิก
-        Swal.fire({
-            title: 'คุณแน่ใจหรือไม่?',
-            text: 'การกระทำนี้จะยกเลิกขั้นตอนที่คุณทำ',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'ใช่, ยกเลิก!',
-            cancelButtonText: 'ยกเลิก'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // กระทำเมื่อยืนยัน
-                console.log('Submit form action');
-            }
-        });
-    }
+
 </script>
 <?php
 include_once 'services_teacher/INSERT_teacher.php';

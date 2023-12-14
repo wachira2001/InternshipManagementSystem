@@ -17,7 +17,8 @@ try {
             $_POST['T_email'],
             $_POST['T_gender'],
             $_POST['T_username'],
-            $_POST['T_password']
+            $_POST['T_password'],
+            $_POST['R_ID']
         )
     ) {
         $T_ID = $_POST['T_ID'];
@@ -33,6 +34,8 @@ try {
         $T_gender = $_POST['T_gender'];
         $T_username = $_POST['T_username'];
         $T_password = $_POST['T_password'];
+        $R_ID = $_POST['R_ID'];
+
 
         // ตรวจสอบประเภทของไฟล์
         $filename = $_FILES['T_img']['name'];
@@ -56,7 +59,8 @@ try {
                           T_email = :T_email,
                           T_gender = :T_gender,
                           T_username = :T_username,
-                          T_password = :T_password
+                          T_password = :T_password,
+                      R_ID = :R_ID
                       WHERE T_ID = :T_ID");
 
         // กำหนดค่าพารามิเตอร์
@@ -72,6 +76,7 @@ try {
         $updateStmt->bindParam(':T_gender', $T_gender, PDO::PARAM_STR);
         $updateStmt->bindParam(':T_username', $T_username, PDO::PARAM_STR);
         $updateStmt->bindParam(':T_password', $T_password, PDO::PARAM_STR);
+        $updateStmt->bindParam(':R_ID', $R_ID, PDO::PARAM_STR);
         $updateStmt->bindParam(':T_ID', $T_ID, PDO::PARAM_STR);
 
         // ทำการ execute คำสั่ง SQL

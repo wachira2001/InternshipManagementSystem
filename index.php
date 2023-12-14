@@ -13,7 +13,7 @@
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="Bootstrap Gallery">
     <title>ระบบจัดการฝึกประสบการณ์วิชาชีพ</title>
-    <link rel="icon" type="image/png" href="upload_img/1.jpg">
+    <link rel="icon" type="image/png" href="#">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mitr&display=swap" rel="stylesheet">
